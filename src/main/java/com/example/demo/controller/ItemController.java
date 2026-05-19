@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,8 +45,15 @@ public class ItemController {
 
 	@GetMapping("/items")
 	public String index(@RequestParam(defaultValue = "") Integer genreId,
+			@RequestParam(value = "year", required = false) Integer year,
+			@RequestParam(value = "month", required = false) Integer month,
 			Model model) {
 		genreList(model);
+
+		LocalDate today = LocalDate.now();
+		int currentYear = (year != null) ? year : today.getYear();
+		int currentMonth = (month != null) ? month : today.getMonthValue();
+
 		List<Item> itemList = itemRepository.findByUser_IdOrderByAddDate(accountLogin.getId());
 		if (genreId != null) {
 			itemList = itemRepository.findByUser_IdAndGenre_IdOrderByAddDate(accountLogin.getId(), genreId);
@@ -140,6 +148,37 @@ public class ItemController {
 			Model model) {
 		itemRepository.deleteById(id);
 		return "redirect:/items";
+	}
+
+	// カレンダー（コピペ）
+	@GetMapping("/calendar")
+	public String showCalendar(@RequestParam(value = "year", required = false) Integer year,
+			@RequestParam(value = "month", required = false) Integer month,
+			Model model) {
+
+		// 現在の年月の取得
+		LocalDate localDate = LocalDate.now();
+		int currentYear = (year != null) ? year : localDate.getYear();
+		int currentMonth = (month != null) ? month : localDate.getMonthValue();
+
+		YearMonth yearMonth = YearMonth.of(currentYear, currentMonth);
+		LocalDate firstOfMonth = yearMonth.atDay(1); // 月初
+
+		// カレンダーの開始日（月初の日曜日の日付）を算出
+		int offset = firstOfMonth.getDayOfWeek().getValue() % 7;
+		LocalDate startDate = firstOfMonth.minusDays(offset);
+
+		// 42マス分の日付リストを作成
+		List<LocalDate> calendarDates = new ArrayList<>();
+		for (int i = 0; i < 42; i++) {
+			calendarDates.add(startDate.plusDays(i));
+		}
+
+		model.addAttribute("calendarDates", calendarDates);
+		model.addAttribute("currentYear", currentYear);
+		model.addAttribute("currentMonth", currentMonth);
+
+		return "item/calendar";
 	}
 
 }

@@ -1,18 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<title>一覧画面</title>
+	<link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
+
 <body>
+
+	<header th:replace="~{conclusion/header}"></header>
 	
+	<aside>
+		
+	</aside>
+	
+	<main>
+		
 	<nav>
 		<a th:href="@{/items/add}">新規登録</a>
 		<a th:href="@{/logout}">ログアウト</a>
-		<a th:each="genre : ${genres}" th:text="${genre.genreName}"
-		th:href="@{/items(genreId = ${genre.id})}" ></a>
+		<a th:each="genre : ${genres}" th:text="${genre.genreName}" th:href="@{/items(genreId = ${genre.id})}"></a>
 	</nav>
-	
+
 	<table border="1">
 		<tr>
 			<th>日付</th>
@@ -44,7 +54,12 @@
 			</td>
 		</tr>
 	</table>
-	
+
 	<p>今月の収支：<span th:text="${total}"></span>円</p>
+	
+	</main>
+	
+	<footer th:replace="~{conclusion/footer}"></footer>
 </body>
+
 </html>

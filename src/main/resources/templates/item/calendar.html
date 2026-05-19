@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>カレンダー</title>
+    <style>
+        .calendar-table {border-collapse: collapse; }
+        .calendar-table th, .calendar-table td { border: 1px solid #ccc; padding: 20px; text-align: center; }
+        .other-month { color: #ccc; } /* 先月・来月の日付用 */
+    </style>
+</head>
+<body>
+
+    <h2><span th:text="${currentYear}"></span>年 <span th:text="${currentMonth}"></span>月</h2>
+
+    <table class="calendar-table">
+        <thead>
+            <tr>
+                <th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- 7日ごとに改行 -->
+            <tr th:each="date, iterStat : ${calendarDates}" th:if="${iterStat.index % 7 == 0}">
+                <td th:each="i : ${#numbers.sequence(0, 6)}" 
+                    th:with="currentDate=${calendarDates[iterStat.index + i]}"
+                    th:class="${currentDate.monthValue != currentMonth} ? 'other-month'">
+                    <span th:text="${currentDate.dayOfMonth}"></span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+@charset "UTF-8";
+body {
+  text-align: center;
+  margin: 0;
+}
+
+header{
+	background-color: #aaaaaa;
+	font-size: 250%;
+	color: white;
+}
+
+footer{
+	background-color: #aaaaaa;
+	color: white;
+}
