@@ -47,6 +47,10 @@ public class ItemController {
 			Model model) {
 		genreList(model);
 		List<Item> itemList = itemRepository.findByUser_IdOrderByAddDate(accountLogin.getId());
+		if (genreId != null) {
+			itemList = itemRepository.findByUser_IdAndGenre_IdOrderByAddDate(accountLogin.getId(), genreId);
+		}
+
 		model.addAttribute("items", itemList);
 
 		int total = 0;

@@ -10,4 +10,6 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
 	List<Item> findByUser_IdOrderByAddDate(Integer id);
 
+	List<Item> findByUser_IdAndGenre_IdOrderByAddDate(Integer userId, Integer genreId);
+
 }

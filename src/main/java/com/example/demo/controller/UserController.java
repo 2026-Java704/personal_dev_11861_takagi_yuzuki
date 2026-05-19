@@ -19,14 +19,14 @@ import com.example.demo.repository.UserRepository;
 public class UserController {
 
 	private final UserRepository userRepository;
-	//	private final HttpSession session;
+	private final HttpSession session;
 	private final AccountLogin accountLogin;
 
 	public UserController(UserRepository userRepository,
 			HttpSession session,
 			AccountLogin accountLogin, ItemController itemController) {
 		this.userRepository = userRepository;
-		//		this.session = session;
+		this.session = session;
 		this.accountLogin = accountLogin;
 	}
 
@@ -93,6 +93,12 @@ public class UserController {
 			accountLogin.setName(user.getUserName());
 			return "redirect:/items";
 		}
+	}
+
+	@GetMapping("/logout")
+	public String logaut() {
+		session.invalidate();
+		return "user/logout";
 	}
 
 }
