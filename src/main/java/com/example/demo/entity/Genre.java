@@ -16,12 +16,12 @@ public class Genre {
 	@Column(name = "genre_name")
 	private String genreName;
 	@Column(name = "is_income")
-	private String isIncome;
+	private boolean isIncome;
 
 	public Genre() {
 	}
 
-	public Genre(String genreName, String isIncome) {
+	public Genre(String genreName, boolean isIncome) {
 		this.genreName = genreName;
 		this.isIncome = isIncome;
 	}
@@ -42,11 +42,11 @@ public class Genre {
 		this.genreName = genreName;
 	}
 
-	public String getIsIncome() {
+	public boolean getIsIncome() {
 		return isIncome;
 	}
 
-	public void setIsIncome(String isIncome) {
+	public void setIsIncome(boolean isIncome) {
 		this.isIncome = isIncome;
 	}
 

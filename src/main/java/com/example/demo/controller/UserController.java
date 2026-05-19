@@ -17,15 +17,16 @@ import com.example.demo.repository.UserRepository;
 
 @Controller
 public class UserController {
+
 	private final UserRepository userRepository;
-	private final HttpSession session;
+	//	private final HttpSession session;
 	private final AccountLogin accountLogin;
 
 	public UserController(UserRepository userRepository,
 			HttpSession session,
-			AccountLogin accountLogin) {
+			AccountLogin accountLogin, ItemController itemController) {
 		this.userRepository = userRepository;
-		this.session = session;
+		//		this.session = session;
 		this.accountLogin = accountLogin;
 	}
 
@@ -42,7 +43,7 @@ public class UserController {
 			Model model) {
 
 		List<String> errerList = new ArrayList<>();
-		User userEmail = userRepository.findByEmail(email);
+		User user = userRepository.findByEmail(email);
 
 		if (name.equals("")) {
 			errerList.add("名前は必須です");
@@ -56,12 +57,14 @@ public class UserController {
 		if (!password.equals(passwordConfirm)) {
 			errerList.add("パスワードが違っています");
 		}
-		if (userEmail != null) {
+		if (user != null) {
 			errerList.add("すでに登録されてるメールアドレスです");
 		}
 
+		System.out.println(errerList);
+
 		if (errerList.isEmpty()) {
-			User user = new User(name, email, password);
+			user = new User(name, email, password);
 			userRepository.save(user);
 			return "redirect:/";
 		} else {
@@ -72,7 +75,6 @@ public class UserController {
 
 	@GetMapping({ "/", "/login" })
 	public String index() {
-		session.invalidate();
 		return "user/login";
 	}
 

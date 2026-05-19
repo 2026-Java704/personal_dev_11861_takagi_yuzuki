@@ -5,6 +5,46 @@
 <title>Insert title here</title>
 </head>
 <body>
-
+	
+	<nav>
+		<a th:href="@{/items/add}">新規登録</a>
+		<a th:href="@{/logout}">ログアウト</a>
+		<a th:each="genre : ${genres}" th:text="${genre.genreName}"
+		th:href="@{/items(genreId = ${genre.id})}" ></a>
+	</nav>
+	
+	<table border="1">
+		<tr>
+			<th>日付</th>
+			<th>名前</th>
+			<th>ジャンル</th>
+			<th>金額</th>
+			<th>コメント</th>
+			<th>編集</th>
+			<th>削除</th>
+		</tr>
+		<tr th:each="item: ${items}">
+			<td th:text="${item.addDate}"></td>
+			<td th:text="${item.itemName}"></td>
+			<td th:text="${item.genre.genreName}"></td>
+			<td>
+				<span th:if="!${item.genre.isIncome}" th:text="|-${item.price}|"></span>
+				<span th:if="${item.genre.isIncome}" th:text="|+${item.price}|"></span>
+			</td>
+			<td th:text="${item.comment}"></td>
+			<td>
+				<form th:action="@{/items/{id}/edit(id = ${item.id})}" method="get">
+					<button>編集</button>
+				</form>
+			</td>
+			<td>
+				<form th:action="@{/items/{id}/delete(id = ${item.id})}" method="post">
+					<button>削除</button>
+				</form>
+			</td>
+		</tr>
+	</table>
+	
+	<p>今月の収支：<span th:text="${total}"></span>円</p>
 </body>
 </html>

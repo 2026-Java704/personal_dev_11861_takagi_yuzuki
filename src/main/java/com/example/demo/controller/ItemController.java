@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -36,17 +37,38 @@ public class ItemController {
 		this.genreRepository = genreRepository;
 	}
 
+	public void genreList(Model model) {
+		List<Genre> genreList = genreRepository.findAll();
+		model.addAttribute("genres", genreList);
+	}
+
 	@GetMapping("/items")
 	public String index(@RequestParam(defaultValue = "") Integer genreId,
 			Model model) {
-		List<Item> itemList = itemRepository.findAll();
+		genreList(model);
+		List<Item> itemList = itemRepository.findByUser_IdOrderByAddDate(accountLogin.getId());
 		model.addAttribute("items", itemList);
+
+		int total = 0;
+		for (Item item : itemList) {
+			if (item.getGenre().getIsIncome()) {
+				total += item.getPrice();
+			} else {
+				total -= item.getPrice();
+			}
+		}
+		model.addAttribute("total", total);
+
 		return "item/items";
 	}
 
 	@GetMapping("/items/add")
-	public String add() {
-		return "item/addEditItem";
+	public String add(Model model) {
+		Item item = new Item();
+		genreList(model);
+		model.addAttribute("item", item);
+		model.addAttribute("onOff", true);
+		return "item/addItem";
 	}
 
 	@PostMapping("/items/add")
@@ -54,24 +76,41 @@ public class ItemController {
 			@RequestParam(defaultValue = "") Integer genreId,
 			@RequestParam(defaultValue = "") Integer price,
 			@RequestParam(defaultValue = "") String itemName,
-			@RequestParam(defaultValue = "") String comment) {
+			@RequestParam(defaultValue = "") String comment,
+			Model model) {
 
-		User user = userRepository.findById(accountLogin.getId()).get();
-		Genre genre = genreRepository.findById(genreId).get();
+		List<String> errer = new ArrayList<>();
 
-		Item item = new Item(itemName, user, genre, price, addDate, comment);
+		if (addDate == null) {
+			errer.add("日付を入力してください");
+		}
+		if (price == null) {
+			errer.add("金額を入力してください");
+		}
+		if (itemName.equals("")) {
+			errer.add("名前を入力してください");
+		}
 
-		itemRepository.save(item);
+		if (errer.isEmpty()) {
+			User user = userRepository.findById(accountLogin.getId()).get();
+			Genre genre = genreRepository.findById(genreId).get();
+			Item item = new Item(itemName, user, genre, price, addDate, comment);
+			itemRepository.save(item);
+			return "redirect:/items";
 
-		return "redirect:/items";
+		} else {
+			model.addAttribute("errers", errer);
+			return "item/addItem";
+		}
 	}
 
 	@GetMapping("/items/{id}/edit")
 	public String edit(@PathVariable Integer id,
 			Model model) {
+		genreList(model);
 		Item item = itemRepository.findById(id).get();
 		model.addAttribute("item", item);
-		return "item/addEditItem";
+		return "item/editItem";
 	}
 
 	@PostMapping("/items/{id}/edit")
@@ -92,7 +131,7 @@ public class ItemController {
 		return "redirect:/items";
 	}
 
-	@GetMapping("/items/{id}/delete")
+	@PostMapping("/items/{id}/delete")
 	public String delete(@PathVariable Integer id,
 			Model model) {
 		itemRepository.deleteById(id);
