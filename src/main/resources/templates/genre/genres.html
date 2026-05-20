@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>ジャンル一覧画面</title>
+	<link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+
+<body>
+
+	<header th:replace="~{conclusion/header}"></header>
+	
+	<aside>
+		
+	</aside>
+	
+	<nav>
+		<a th:href="@{/genres/add}">新規登録</a>
+		<a th:href="@{/items}">アイテム管理</a>
+	</nav>
+	
+	<main>
+
+	<table border="1">
+		<tr>
+			<th>ID</th>
+			<th>ジャンル名</th>
+			<th>収支</th>
+			<th>編集</th>
+			<th>削除</th>
+		</tr>
+		<tr th:each="genre: ${genres}">
+			<td th:text="${genre.id}"></td>
+			<td th:text="${genre.genreName}"></td>
+			<td>
+				<span th:if="${genre.isIncome}">収入</span>
+				<span th:if="!${genre.isIncome}">支出</span>
+			</td>
+			<td>
+				<form th:action="@{/genres/{id}/edit(id = ${genre.id})}" method="get">
+					<button>編集</button>
+				</form>
+			</td>
+			<td>
+				<form th:action="@{/genres/{id}/delete(id = ${genre.id})}" method="post">
+					<button>削除</button>
+				</form>
+			</td>
+		</tr>
+	</table>
+	
+	</main>
+	
+	<footer th:replace="~{conclusion/footer}"></footer>
+</body>
+
+</html>

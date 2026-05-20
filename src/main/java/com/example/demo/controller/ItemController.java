@@ -52,6 +52,7 @@ public class ItemController {
 			@RequestParam(value = "month", required = false) Integer month,
 			Model model) {
 		genreList(model);
+		LocalDate now = LocalDate.now();
 
 		List<Item> itemList = itemRepository.findByUser_IdOrderByAddDate(accountLogin.getId());
 		if (genreId != null) {
@@ -60,9 +61,10 @@ public class ItemController {
 
 		model.addAttribute("items", itemList);
 
-		LocalDate now = LocalDate.now();
-		model.addAttribute("total",
-				itemService.getTotalBalance(accountLogin.getId(), now.getYear(), now.getMonthValue()));
+		model.addAttribute("totalMonth",
+				itemService.getMonthTotal(accountLogin.getId(), now.getYear(), now.getMonthValue()));
+		model.addAttribute("totalYear",
+				itemService.getYearTotal(accountLogin.getId(), now.getYear()));
 
 		return "item/items";
 	}

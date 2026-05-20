@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>ジャンル編集画面</title>
+<link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+	
+	<header th:replace="~{conclusion/header}"></header>
+
+	<main>
+	<form th:action="@{/genres/{id}/edit(id = ${genre.id})}" method="post">
+		<table border="1">
+			<tr>
+				<th>ジャンル名</th>
+				<td>
+					<input type="text" name="genreName" th:value="${genre.genreName}">
+				</td>
+			</tr>
+			<tr>
+				<th>収支</th>
+				<td>
+					収入<input type="radio" name="isIncome" value="true" th:checked="${genre.isIncome == true}">
+					支出<input type="radio" name="isIncome" value="false" th:checked="${genre.isIncome == false}">
+				</td>
+			</tr>
+		</table>
+		<input type="submit" value="更新">
+	</form>
+	</main>
+	
+	<footer th:replace="~{conclusion/footer}"></footer>
+	
+</body>
+</html>
