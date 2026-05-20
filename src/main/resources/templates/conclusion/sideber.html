@@ -7,7 +7,7 @@
 			<a th:href="@{/genres}">ジャンル管理</a>
 		</li>
 		<li>
-			<a th:href="@{/calendar}">カレンダー</a>
+			<a th:href="@{/calendar/{year}/{month}(year=${year}, month=${month})}">カレンダー</a>
 		</li>
 		<li>
 			<a th:href="@{/account}">アカウント</a>

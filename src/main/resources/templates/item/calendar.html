@@ -2,7 +2,7 @@
 <html xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>カレンダー</title>
+    <title>カレンダー家計簿</title>
 	<link th:href="@{/css/style.css}" rel="stylesheet">
     <style>
         .calendar-table {border-collapse: collapse; }
@@ -18,12 +18,23 @@
 	
 	<main>
 
-    <h2><span th:text="${currentYear}"></span>年 <span th:text="${currentMonth}"></span>月</h2>
+    <h2 th:text="${currentYear} + 年 + ${currentMonth} + 月の家計簿"></h2>
+	
+	<nav>
+		<a th:href="@{/calendar/{year}/{month}(year=${prevYear}, month=${prevMonth})}">← 前の月</a>
+		<a th:href="@{/calendar/{year}/{month}(year=${nextYear}, month=${nextMonth})}">次の月 →</a>
+	</nav>
 
     <table class="calendar-table">
         <thead>
             <tr>
-                <th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th>
+                <th style="color: red;">日</th>
+				<th>月</th>
+				<th>火</th>
+				<th>水</th>
+				<th>木</th>
+				<th>金</th>
+				<th style="color: blue;">土</th>
             </tr>
         </thead>
         <tbody>

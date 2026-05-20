@@ -20,6 +20,7 @@ import com.example.demo.repository.GenreRepository;
 import com.example.demo.repository.ItemRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.ItemService;
+import com.example.demo.service.NowService;
 
 @Controller
 public class ItemController {
@@ -29,16 +30,20 @@ public class ItemController {
 	private final UserRepository userRepository;
 	private final AccountLogin accountLogin;
 	private final GenreRepository genreRepository;
+	private final NowService now;
 
 	public ItemController(ItemRepository itemRepository,
 			UserRepository userRepository,
 			AccountLogin accountLogin,
-			GenreRepository genreRepository, ItemService itemService) {
+			GenreRepository genreRepository,
+			ItemService itemService,
+			NowService now) {
 		this.itemRepository = itemRepository;
 		this.userRepository = userRepository;
 		this.accountLogin = accountLogin;
 		this.genreRepository = genreRepository;
 		this.itemService = itemService;
+		this.now = now;
 	}
 
 	public void genreList(Model model) {
@@ -48,11 +53,9 @@ public class ItemController {
 
 	@GetMapping("/items")
 	public String index(@RequestParam(defaultValue = "") Integer genreId,
-			@RequestParam(value = "year", required = false) Integer year,
-			@RequestParam(value = "month", required = false) Integer month,
 			Model model) {
 		genreList(model);
-		LocalDate now = LocalDate.now();
+		now.nowYearMonthDate(model);
 
 		List<Item> itemList = itemRepository.findByUser_IdOrderByAddDate(accountLogin.getId());
 		if (genreId != null) {
@@ -62,9 +65,9 @@ public class ItemController {
 		model.addAttribute("items", itemList);
 
 		model.addAttribute("totalMonth",
-				itemService.getMonthTotal(accountLogin.getId(), now.getYear(), now.getMonthValue()));
+				itemService.getMonthTotal(accountLogin.getId(), now.now().getYear(), now.now().getMonthValue()));
 		model.addAttribute("totalYear",
-				itemService.getYearTotal(accountLogin.getId(), now.getYear()));
+				itemService.getYearTotal(accountLogin.getId(), now.now().getYear()));
 
 		return "item/items";
 	}
@@ -145,19 +148,22 @@ public class ItemController {
 		return "redirect:/items";
 	}
 
-	// カレンダー（コピペ）
-	@GetMapping("/calendar")
-	public String showCalendar(@RequestParam(value = "year", required = false) Integer year,
-			@RequestParam(value = "month", required = false) Integer month,
+	// カレンダー
+	@GetMapping("/calendar/{year}/{month}")
+	public String showCalendar(@PathVariable(value = "year", required = false) Integer year,
+			@PathVariable(value = "month", required = false) Integer month,
 			Model model) {
 
 		// 現在の年月の取得
-		LocalDate localDate = LocalDate.now();
-		int currentYear = (year != null) ? year : localDate.getYear();
-		int currentMonth = (month != null) ? month : localDate.getMonthValue();
+		int currentYear = (year != null) ? year : now.now().getYear();
+		int currentMonth = (month != null) ? month : now.now().getMonthValue();
 
 		YearMonth yearMonth = YearMonth.of(currentYear, currentMonth);
 		LocalDate firstOfMonth = yearMonth.atDay(1); // 月初
+
+		//指定された年月の前月・次月を取得
+		LocalDate prevMonth = firstOfMonth.minusMonths(1);
+		LocalDate nextMonth = firstOfMonth.plusMonths(1);
 
 		// カレンダーの開始日（月初の日曜日の日付）を算出
 		int offset = firstOfMonth.getDayOfWeek().getValue() % 7;
@@ -172,6 +178,11 @@ public class ItemController {
 		model.addAttribute("calendarDates", calendarDates);
 		model.addAttribute("currentYear", currentYear);
 		model.addAttribute("currentMonth", currentMonth);
+
+		model.addAttribute("prevYear", prevMonth.getYear());
+		model.addAttribute("prevMonth", prevMonth.getMonthValue());
+		model.addAttribute("nextYear", nextMonth.getYear());
+		model.addAttribute("nextMonth", nextMonth.getMonthValue());
 
 		return "item/calendar";
 	}

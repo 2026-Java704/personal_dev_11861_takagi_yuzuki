@@ -11,17 +11,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.entity.Genre;
 import com.example.demo.repository.GenreRepository;
+import com.example.demo.service.NowService;
 
 @Controller
 public class GenreController {
 	private final GenreRepository genreRepository;
+	private final NowService now;
 
-	public GenreController(GenreRepository genreRepository) {
+	public GenreController(GenreRepository genreRepository,
+			NowService now) {
 		this.genreRepository = genreRepository;
+		this.now = now;
 	}
 
 	@GetMapping("/genres")
 	public String index(Model model) {
+		now.nowYearMonthDate(model);
 		List<Genre> genreList = genreRepository.findAll();
 		model.addAttribute("genres", genreList);
 		return "genre/genres";

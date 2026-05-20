@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.demo.entity.User;
 import com.example.demo.model.AccountLogin;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.service.NowService;
 
 @Controller
 public class UserController {
@@ -21,13 +22,16 @@ public class UserController {
 	private final UserRepository userRepository;
 	private final HttpSession session;
 	private final AccountLogin accountLogin;
+	private final NowService now;
 
 	public UserController(UserRepository userRepository,
 			HttpSession session,
-			AccountLogin accountLogin, ItemController itemController) {
+			AccountLogin accountLogin,
+			NowService now) {
 		this.userRepository = userRepository;
 		this.session = session;
 		this.accountLogin = accountLogin;
+		this.now = now;
 	}
 
 	@GetMapping("/register")
@@ -103,6 +107,7 @@ public class UserController {
 
 	@GetMapping("/account")
 	public String account(Model model) {
+		now.nowYearMonthDate(model);
 		User user = userRepository.findById(accountLogin.getId()).get();
 		model.addAttribute("user", user);
 		return "user/user";
