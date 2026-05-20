@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,14 +9,13 @@ import com.example.demo.entity.Item;
 
 public interface ItemRepository extends JpaRepository<Item, Integer> {
 
+	// ユーザーのアイテムを日時順で一覧表示
 	List<Item> findByUser_IdOrderByAddDate(Integer id);
 
-	// 特定の年と月のデータを取得する
-	//	@Query("SELECT d FROM items d WHERE d.addDate >= :startDate AND d.addDate <= :endDate")
-	//	List<Item> findByMonth(
-	//			@Param("startDate") LocalDate startDate,
-	//			@Param("endDate") LocalDate endDate);
+	// ユーザーの月ごとの取得
+	List<Item> findByUser_IdAndAddDateBetweenOrderByAddDate(Integer userId, LocalDate startDate, LocalDate endDate);
 
+	// ユーザーのアイテムを日時順でジャンル絞り込み一覧表示
 	List<Item> findByUser_IdAndGenre_IdOrderByAddDate(Integer userId, Integer genreId);
 
 }

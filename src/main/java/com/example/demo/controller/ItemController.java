@@ -19,10 +19,12 @@ import com.example.demo.model.AccountLogin;
 import com.example.demo.repository.GenreRepository;
 import com.example.demo.repository.ItemRepository;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.service.ItemService;
 
 @Controller
 public class ItemController {
 
+	private final ItemService itemService;
 	private final ItemRepository itemRepository;
 	private final UserRepository userRepository;
 	private final AccountLogin accountLogin;
@@ -31,11 +33,12 @@ public class ItemController {
 	public ItemController(ItemRepository itemRepository,
 			UserRepository userRepository,
 			AccountLogin accountLogin,
-			GenreRepository genreRepository) {
+			GenreRepository genreRepository, ItemService itemService) {
 		this.itemRepository = itemRepository;
 		this.userRepository = userRepository;
 		this.accountLogin = accountLogin;
 		this.genreRepository = genreRepository;
+		this.itemService = itemService;
 	}
 
 	public void genreList(Model model) {
@@ -50,10 +53,6 @@ public class ItemController {
 			Model model) {
 		genreList(model);
 
-		LocalDate today = LocalDate.now();
-		int currentYear = (year != null) ? year : today.getYear();
-		int currentMonth = (month != null) ? month : today.getMonthValue();
-
 		List<Item> itemList = itemRepository.findByUser_IdOrderByAddDate(accountLogin.getId());
 		if (genreId != null) {
 			itemList = itemRepository.findByUser_IdAndGenre_IdOrderByAddDate(accountLogin.getId(), genreId);
@@ -61,15 +60,9 @@ public class ItemController {
 
 		model.addAttribute("items", itemList);
 
-		int total = 0;
-		for (Item item : itemList) {
-			if (item.getGenre().getIsIncome()) {
-				total += item.getPrice();
-			} else {
-				total -= item.getPrice();
-			}
-		}
-		model.addAttribute("total", total);
+		LocalDate now = LocalDate.now();
+		model.addAttribute("total",
+				itemService.getTotalBalance(accountLogin.getId(), now.getYear(), now.getMonthValue()));
 
 		return "item/items";
 	}
