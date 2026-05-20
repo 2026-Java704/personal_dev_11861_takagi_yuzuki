@@ -40,3 +40,21 @@ main{
 	border: #aaaaaa double 5px;
 	flex: 1;
 }
+
+#edge{
+	display: flex;
+	justify-content: space-between;
+}
+
+#edge a{
+	text-decoration: none;
+}
+
+table{
+	border-collapse: collapse;
+	width: 100%;
+}
+
+th, td{
+	padding: 1%;
+}

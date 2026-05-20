@@ -6,8 +6,10 @@
 	<link th:href="@{/css/style.css}" rel="stylesheet">
     <style>
         .calendar-table {border-collapse: collapse; }
-        .calendar-table th, .calendar-table td { border: 1px solid #ccc; padding: 20px; text-align: center; }
+        .calendar-table th, .calendar-table td { border: 1px solid #ccc; padding: 20px;}
         .other-month { color: #ccc; } /* 先月・来月の日付用 */
+		#minus{  color: red; font-size: 15px;}
+		#plus{ color: blue; font-size: 15px;}
     </style>
 </head>
 <body>
@@ -23,7 +25,7 @@
 
     <h2 th:text="${currentYear} + 年 + ${currentMonth} + 月の家計簿"></h2>
 	
-	<nav>
+	<nav id="edge">
 		<a th:href="@{/calendar/{year}/{month}(year=${prevYear}, month=${prevMonth})}">← 前の月</a>
 		<a th:href="@{/calendar/{year}/{month}(year=${nextYear}, month=${nextMonth})}">次の月 →</a>
 	</nav>
@@ -47,7 +49,13 @@
                     th:with="currentDate=${calendarDates[iterStat.index + i]}"
                     th:class="${currentDate.monthValue != currentMonth} ? 'other-month'">
                     <span th:text="${currentDate.dayOfMonth}"></span>
-                </td>
+					<div th:each="item : ${items}">
+						<span  th:if="${item.addDate == currentDate && !item.genre.isIncome}"
+							id="minus" th:text="'&#165;-' + ${item.price}"></span>
+						<span th:if="${item.addDate == currentDate && item.genre.isIncome}"
+							id="plus" th:text="'&#165;+' + ${item.price}"></span>
+					</div>
+				</td>
             </tr>
         </tbody>
     </table>

@@ -165,6 +165,9 @@ public class ItemController {
 		LocalDate prevMonth = firstOfMonth.minusMonths(1);
 		LocalDate nextMonth = firstOfMonth.plusMonths(1);
 
+		List<Item> itemList = itemRepository.findByUser_IdAndAddDateBetweenOrderByAddDate(accountLogin.getId(),
+				firstOfMonth, yearMonth.atEndOfMonth());
+
 		// カレンダーの開始日（月初の日曜日の日付）を算出
 		int offset = firstOfMonth.getDayOfWeek().getValue() % 7;
 		LocalDate startDate = firstOfMonth.minusDays(offset);
@@ -178,6 +181,8 @@ public class ItemController {
 		model.addAttribute("calendarDates", calendarDates);
 		model.addAttribute("currentYear", currentYear);
 		model.addAttribute("currentMonth", currentMonth);
+
+		model.addAttribute("items", itemList);
 
 		model.addAttribute("prevYear", prevMonth.getYear());
 		model.addAttribute("prevMonth", prevMonth.getMonthValue());

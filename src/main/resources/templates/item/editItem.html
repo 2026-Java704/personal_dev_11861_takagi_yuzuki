@@ -11,6 +11,10 @@
 	
 	<header th:replace="~{conclusion/header}"></header>
 
+	<div id="container">
+		
+	<aside th:replace="~{conclusion/sideber}"></aside>
+	
 	<main>
 
 		<form th:action="@{/items/{id}/edit(id = ${item.id})}" method="post">
@@ -55,6 +59,8 @@
 		<a th:href="@{/items}">戻る</a>
 		
 	</main>
+	
+	</div>
 	
 	<footer th:replace="~{conclusion/footer}"></footer>
 

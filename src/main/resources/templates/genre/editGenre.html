@@ -9,6 +9,10 @@
 	
 	<header th:replace="~{conclusion/header}"></header>
 
+	<div id="container">
+	
+		<aside th:replace="~{conclusion/sideber}"></aside>
+	
 	<main>
 	<form th:action="@{/genres/{id}/edit(id = ${genre.id})}" method="post">
 		<table border="1">
@@ -31,6 +35,8 @@
 	<a th:href="@{/genres}">戻る</a>
 	
 	</main>
+	
+	</div>
 	
 	<footer th:replace="~{conclusion/footer}"></footer>
 	
