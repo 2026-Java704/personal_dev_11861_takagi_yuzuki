@@ -8,9 +8,13 @@
 <body>
 	<header th:replace="~{conclusion/header}"></header>
 	
+	<div id="container">
+	
 	<aside th:replace="~{conclusion/sideber}"></aside>
 	
 	<main>
+		
+		<h2>アカウント情報</h2>
 		
 		<table border="1">
 			<tr>
@@ -27,14 +31,17 @@
 			</tr>
 		</table>
 		
-		<form>
+		<form th:action="@{/account/edit}" method="get">
 			<button>編集</button>
 		</form>
-		<form>
-			<button>削除</button>
+		
+		<form th:action="@{/account/delete}" method="post">
+			<button th:id="delete">削除</button>
 		</form>
 		
 	</main>
+	
+	</div>
 	
 	<footer th:replace="~{conclusion/footer}"></footer>
 </body>

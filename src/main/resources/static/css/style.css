@@ -1,6 +1,8 @@
 @charset "UTF-8";
-body {
+body, html{
   margin: 0;
+  height: 100vh;
+  display: block;
 }
 
 
@@ -13,4 +15,28 @@ header{
 footer{
 	background-color: #aaaaaa;
 	color: white;
+}
+
+#container{
+	display: flex;
+}
+
+aside{
+	display: flex;
+	width: 20%;
+	min-width: 0px;
+	max-width: 200px;
+	text-align: left;
+}
+
+aside, ul{
+	list-style: none;
+	padding-left: 1%;
+}
+
+main{
+	margin: 1%;
+	padding: 2%;
+	border: #aaaaaa double 5px;
+	flex: 1;
 }

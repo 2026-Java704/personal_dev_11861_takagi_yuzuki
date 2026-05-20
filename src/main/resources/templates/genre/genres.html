@@ -11,14 +11,16 @@
 
 	<header th:replace="~{conclusion/header}"></header>
 	
-	<aside th:replace="~{conclusion/sideber}"></aside>
+	<div id="container">
 	
+		<aside th:replace="~{conclusion/sideber}"></aside>
+	
+	<main>
+
 	<nav>
 		<a th:href="@{/genres/add}">新規登録</a>
 	</nav>
 	
-	<main>
-
 	<table border="1">
 		<tr>
 			<th>ID</th>
@@ -48,6 +50,8 @@
 	</table>
 	
 	</main>
+	
+	</div>
 	
 	<footer th:replace="~{conclusion/footer}"></footer>
 </body>

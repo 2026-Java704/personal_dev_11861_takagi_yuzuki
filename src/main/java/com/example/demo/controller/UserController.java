@@ -34,11 +34,13 @@ public class UserController {
 		this.now = now;
 	}
 
+	// 新規登録画面表示
 	@GetMapping("/register")
 	public String register() {
 		return "user/create";
 	}
 
+	// 新規登録処理
 	@PostMapping("/register")
 	public String add(@RequestParam(defaultValue = "") String name,
 			@RequestParam(defaultValue = "") String email,
@@ -77,11 +79,13 @@ public class UserController {
 		}
 	}
 
+	// ログイン画面表示
 	@GetMapping({ "/", "/login" })
 	public String index() {
 		return "user/login";
 	}
 
+	// ログイン処理
 	@PostMapping("/login")
 	public String login(@RequestParam(defaultValue = "") String email,
 			@RequestParam(defaultValue = "") String password,
@@ -99,18 +103,36 @@ public class UserController {
 		}
 	}
 
+	// ログアウト処理
 	@GetMapping("/logout")
 	public String logaut() {
 		session.invalidate();
 		return "user/logout";
 	}
 
+	// アカウント情報画面表示
 	@GetMapping("/account")
 	public String account(Model model) {
 		now.nowYearMonthDate(model);
 		User user = userRepository.findById(accountLogin.getId()).get();
 		model.addAttribute("user", user);
 		return "user/user";
+	}
+
+	@GetMapping("/account/edit")
+	public String edit(Model model) {
+		now.nowYearMonthDate(model);
+		User user = userRepository.findById(accountLogin.getId()).get();
+		model.addAttribute("user", user);
+		return "user/editUser";
+	}
+
+	@PostMapping("/account/edit")
+	public String update(Model model) {
+		now.nowYearMonthDate(model);
+		User user = userRepository.findById(accountLogin.getId()).get();
+		model.addAttribute("user", user);
+		return "user/editUser";
 	}
 
 }

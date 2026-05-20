@@ -9,7 +9,9 @@
 
 <body>
 
-	<h2>新規登録</h2>
+	<header>新規登録</header>
+	
+	<main>
 	
 	<form th:action="@{/register}" method="post">
 		名前　　　　　：<input type="text" name="name">
@@ -19,6 +21,8 @@
 		<br><input type="submit" value="登録">
 	</form>
 	<a th:href="@{/}">ログインはこちら</a>
+	
+	</main>
 
 </body>
 

@@ -8,16 +8,18 @@
 <body>
 
 	<header th:replace="~{conclusion/header}"></header>
-		
+	
+	<div id="container">
+	
 		<aside th:replace="~{conclusion/sideber}"></aside>
-		
+	
+		<main>
+			
 		<nav>
 			<a th:href="@{/items/add}">新規登録</a>
 			<a th:href="@{/items}">一覧</a>
 			<a th:each="genre : ${genres}" th:text="${genre.genreName}" th:href="@{/items(genreId = ${genre.id})}"></a>
 		</nav>
-		
-		<main>
 
 		<table border="1">
 			<tr>
@@ -56,7 +58,9 @@
 		
 		</main>
 		
-		<footer th:replace="~{conclusion/footer}"></footer>
+	</div>
+		
+	<footer th:replace="~{conclusion/footer}"></footer>
 	
 </body>
 </html>
