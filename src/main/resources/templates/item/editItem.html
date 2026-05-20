@@ -8,6 +8,8 @@
 </head>
 
 <body>
+	
+	<header th:replace="~{conclusion/header}"></header>
 
 	<main>
 
@@ -50,7 +52,11 @@
 			<input type="submit" value="変更">
 		</form>
 
+		<a th:href="@{/items}">戻る</a>
+		
 	</main>
+	
+	<footer th:replace="~{conclusion/footer}"></footer>
 
 </body>
 

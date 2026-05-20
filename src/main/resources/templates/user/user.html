@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+	<header th:replace="~{conclusion/header}"></header>
+	
+	<aside th:replace="~{conclusion/sideber}"></aside>
+	
+	<main>
+		
+		<table border="1">
+			<tr>
+				<th>名前</th>
+				<td th:text="${user.userName}"></td>
+			</tr>
+			<tr>
+				<th>メールアドレス</th>
+				<td th:text="${user.email}"></td>
+			</tr>
+			<tr>
+				<th>パスワード</th>
+				<td>****</td>
+			</tr>
+		</table>
+		
+		<form>
+			<button>編集</button>
+		</form>
+		<form>
+			<button>削除</button>
+		</form>
+		
+	</main>
+	
+	<footer th:replace="~{conclusion/footer}"></footer>
+</body>
+</html>

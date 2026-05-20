@@ -101,4 +101,11 @@ public class UserController {
 		return "user/logout";
 	}
 
+	@GetMapping("/account")
+	public String account(Model model) {
+		User user = userRepository.findById(accountLogin.getId()).get();
+		model.addAttribute("user", user);
+		return "user/user";
+	}
+
 }
