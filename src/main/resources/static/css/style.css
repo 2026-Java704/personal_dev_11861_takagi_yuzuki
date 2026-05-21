@@ -1,8 +1,12 @@
 @charset "UTF-8";
 body, html{
   margin: 0;
-  height: 100vh;
-  display: block;
+  max-height: 100vh;
+}
+
+body{
+	display: flex;
+	flex-direction: column;
 }
 
 
@@ -10,11 +14,15 @@ header{
 	background-color: #aaaaaa;
 	font-size: 250%;
 	color: white;
+	font-family: "Meiryo", sans-serif;
+	padding: 1%;
 }
 
 footer{
+	font-family: "Meiryo", sans-serif;
 	background-color: #aaaaaa;
 	color: white;
+	text-align: center;
 }
 
 #container{
@@ -24,7 +32,7 @@ footer{
 aside{
 	display: flex;
 	width: 20%;
-	min-width: 0px;
+	min-width: 0;
 	max-width: 200px;
 	text-align: left;
 }
@@ -53,8 +61,37 @@ main{
 table{
 	border-collapse: collapse;
 	width: 100%;
+	table-layout: fixed;
 }
 
 th, td{
 	padding: 1%;
+}
+
+.income{
+	background-color: #eeeeff;
+}
+
+.expense{
+	background-color: #ffeeee;
+}
+
+table.total{
+	text-align: center;
+}
+
+table.total td{
+	border-bottom: 2px solid black;
+}
+
+.errer{
+	color: red;
+}
+
+button{
+	width: 100%;
+}
+
+.leftRight{
+	display: flex;
 }

@@ -14,6 +14,11 @@
 		<aside th:replace="~{conclusion/sideber}"></aside>
 	
 	<main>
+		
+		<th:block th:if="${errer}">
+			<div th:text="${errer}" class="errer"></div>
+		</th:block>
+		
 	<form th:action="@{/genres/add}" method="post">
 		<table border="1">
 			<tr>

@@ -74,10 +74,10 @@ public class ItemController {
 
 	@GetMapping("/items/add")
 	public String add(Model model) {
+		now.nowYearMonthDate(model);
 		Item item = new Item();
 		genreList(model);
 		model.addAttribute("item", item);
-		model.addAttribute("onOff", true);
 		return "item/addItem";
 	}
 
@@ -89,19 +89,19 @@ public class ItemController {
 			@RequestParam(defaultValue = "") String comment,
 			Model model) {
 
-		List<String> errer = new ArrayList<>();
+		List<String> errerList = new ArrayList<>();
 
 		if (addDate == null) {
-			errer.add("日付を入力してください");
+			errerList.add("日付を選択してください");
 		}
 		if (price == null) {
-			errer.add("金額を入力してください");
+			errerList.add("金額を入力してください");
 		}
 		if (itemName.equals("")) {
-			errer.add("名前を入力してください");
+			errerList.add("名前を入力してください");
 		}
 
-		if (errer.isEmpty()) {
+		if (errerList.isEmpty()) {
 			User user = userRepository.findById(accountLogin.getId()).get();
 			Genre genre = genreRepository.findById(genreId).get();
 			Item item = new Item(itemName, user, genre, price, addDate, comment);
@@ -109,7 +109,7 @@ public class ItemController {
 			return "redirect:/items";
 
 		} else {
-			model.addAttribute("errers", errer);
+			model.addAttribute("errers", errerList);
 			return "item/addItem";
 		}
 	}
@@ -117,6 +117,7 @@ public class ItemController {
 	@GetMapping("/items/{id}/edit")
 	public String edit(@PathVariable Integer id,
 			Model model) {
+		now.nowYearMonthDate(model);
 		genreList(model);
 		Item item = itemRepository.findById(id).get();
 		model.addAttribute("item", item);
@@ -134,11 +135,27 @@ public class ItemController {
 		Item item = itemRepository.findById(id).get();
 		Genre genre = genreRepository.findById(genreId).get();
 
-		item.update(itemName, genre, price, addDate, comment);
+		List<String> errerList = new ArrayList<>();
 
-		itemRepository.save(item);
+		if (addDate == null) {
+			errerList.add("月日を選択してください");
+		}
+		if (itemName.equals("")) {
+			errerList.add("名前を入力してください");
+		}
+		if (price == null) {
+			errerList.add("金額を入力してください");
+		}
 
-		return "redirect:/items";
+		if (errerList.isEmpty()) {
+			item.update(itemName, genre, price, addDate, comment);
+			itemRepository.save(item);
+			return "redirect:/items";
+		} else {
+			model.addAttribute("errers", errerList);
+			model.addAttribute("item", item);
+			return "item/editItem";
+		}
 	}
 
 	@PostMapping("/items/{id}/delete")
@@ -189,7 +206,78 @@ public class ItemController {
 		model.addAttribute("nextYear", nextMonth.getYear());
 		model.addAttribute("nextMonth", nextMonth.getMonthValue());
 
+		model.addAttribute("totalMonth",
+				itemService.getMonthTotal(accountLogin.getId(), firstOfMonth.getYear(), firstOfMonth.getMonthValue()));
+
 		return "item/calendar";
+	}
+
+	@GetMapping("/detil/{year}/{month}")
+	public String detil(@PathVariable(value = "year", required = false) Integer year,
+			@PathVariable(value = "month", required = false) Integer month,
+			Model model) {
+
+		int currentYear = (year != null) ? year : now.now().getYear();
+		int currentMonth = (month != null) ? month : now.now().getMonthValue();
+
+		YearMonth yearMonth = YearMonth.of(currentYear, currentMonth);
+		LocalDate firstOfMonth = yearMonth.atDay(1); // 月初
+
+		//指定された年月の前月・次月を取得
+		LocalDate prevMonth = firstOfMonth.minusMonths(1);
+		LocalDate nextMonth = firstOfMonth.plusMonths(1);
+
+		int totalIncomeMonth = itemService.getMonthIncome(accountLogin.getId(), firstOfMonth.getYear(),
+				firstOfMonth.getMonthValue());
+		int totalExpenseMonth = itemService.getMonthExpense(accountLogin.getId(), firstOfMonth.getYear(),
+				firstOfMonth.getMonthValue());
+		int totalMonth = itemService.getMonthTotal(accountLogin.getId(), firstOfMonth.getYear(),
+				firstOfMonth.getMonthValue());
+
+		// ジャンルごとの合計金額とパーセント
+		List<Genre> genreList = genreRepository.findAll();
+		for (Genre genre : genreList) {
+			genre.setTotal(itemService.genreTotal(accountLogin.getId(), genre.getId(), firstOfMonth.getYear(),
+					firstOfMonth.getMonthValue()));
+			if (genre.getIsIncome() == true) {
+				genre.setPercent(itemService.genrePercent(accountLogin.getId(), genre.getId(), totalIncomeMonth,
+						firstOfMonth.getYear(),
+						firstOfMonth.getMonthValue()));
+			} else {
+				genre.setPercent(itemService.genrePercent(accountLogin.getId(), genre.getId(), totalExpenseMonth,
+						firstOfMonth.getYear(),
+						firstOfMonth.getMonthValue()));
+			}
+			genreRepository.save(genre);
+		}
+
+		// グラフ用
+		List<Integer> percents = new ArrayList<>();
+		List<String> genreLabels = new ArrayList<>();
+		for (Genre genre : genreList) {
+			if (genre.getIsIncome() == false) {
+				genreLabels.add(genre.getGenreName());
+				percents.add(genre.getPercent());
+			}
+		}
+
+		genreList(model);
+		model.addAttribute("labels", genreLabels);
+		model.addAttribute("values", percents);
+
+		model.addAttribute("currentYear", currentYear);
+		model.addAttribute("currentMonth", currentMonth);
+
+		model.addAttribute("totalIncomeMonth", totalIncomeMonth);
+		model.addAttribute("totalExpenseMonth", totalExpenseMonth);
+		model.addAttribute("totalMonth", totalMonth);
+
+		model.addAttribute("prevYear", prevMonth.getYear());
+		model.addAttribute("prevMonth", prevMonth.getMonthValue());
+		model.addAttribute("nextYear", nextMonth.getYear());
+		model.addAttribute("nextMonth", nextMonth.getMonthValue());
+
+		return "item/detil";
 	}
 
 }

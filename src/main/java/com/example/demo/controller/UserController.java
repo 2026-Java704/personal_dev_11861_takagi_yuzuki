@@ -94,7 +94,7 @@ public class UserController {
 		User user = userRepository.findByEmailAndPassword(email, password);
 
 		if (user == null) {
-			model.addAttribute("errerMessage", "ユーザーが見つかりませんでした");
+			model.addAttribute("errer", "ユーザーが見つかりませんでした");
 			return "user/login";
 		} else {
 			accountLogin.setId(user.getId());
@@ -128,11 +128,43 @@ public class UserController {
 	}
 
 	@PostMapping("/account/edit")
-	public String update(Model model) {
+	public String update(@RequestParam(defaultValue = "") String userName,
+			@RequestParam(defaultValue = "") String email,
+			@RequestParam(defaultValue = "") String password,
+			@RequestParam(defaultValue = "") String passwordConfirm,
+			Model model) {
 		now.nowYearMonthDate(model);
+		List<String> errerList = new ArrayList<>();
 		User user = userRepository.findById(accountLogin.getId()).get();
-		model.addAttribute("user", user);
-		return "user/editUser";
+
+		if (userName.equals("")) {
+			errerList.add("名前が未入力です");
+		}
+		if (email.equals("")) {
+			errerList.add("メールアドレスが未入力です");
+		}
+		if (password.equals("") && passwordConfirm.equals("")) {
+			password = user.getPassword();
+		} else if (password.equals(passwordConfirm)) {
+			errerList.add("パスワードが一致しませんでした");
+		}
+
+		if (errerList.isEmpty()) {
+			user.update(userName, email, password);
+			userRepository.save(user);
+			return "redirect:/account";
+		} else {
+			model.addAttribute("errers", errerList);
+			model.addAttribute("user", user);
+			return "user/editUser";
+		}
+
+	}
+
+	@PostMapping("/account/delete")
+	public String delete() {
+		userRepository.deleteById(accountLogin.getId());
+		return "redirect:/";
 	}
 
 }

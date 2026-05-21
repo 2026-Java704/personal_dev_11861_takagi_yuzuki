@@ -18,4 +18,6 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	// ユーザーのアイテムを日時順でジャンル絞り込み一覧表示
 	List<Item> findByUser_IdAndGenre_IdOrderByAddDate(Integer userId, Integer genreId);
 
+	List<Item> findByUser_IdAndGenre_IdAndAddDateBetweenOrderByAddDate(Integer userId, Integer genreId,
+			LocalDate startDate, LocalDate endDate);
 }

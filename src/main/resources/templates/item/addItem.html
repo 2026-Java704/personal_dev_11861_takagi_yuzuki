@@ -17,6 +17,12 @@
 	
 	<main>
 
+		<th:block th:if="${errers}">
+			<ul>
+				<li th:each="errer : ${errers}" th:text="${errer}" class="errer"></li>
+			</ul>
+		</th:block>
+		
 		<form th:action="@{/items/add}" method="post">
 			<table border="1">
 				<tr>

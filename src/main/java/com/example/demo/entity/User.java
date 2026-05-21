@@ -45,19 +45,11 @@ public class User {
 		return password;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public void setUserName(String userName) {
+	public void update(String userName,
+			String email,
+			String password) {
 		this.userName = userName;
-	}
-
-	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public void setPassword(String password) {
 		this.password = password;
 	}
 

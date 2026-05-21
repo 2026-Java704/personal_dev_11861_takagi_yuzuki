@@ -33,7 +33,8 @@ public class GenreController {
 	}
 
 	@GetMapping("/genres/add")
-	public String add() {
+	public String add(Model model) {
+		now.nowYearMonthDate(model);
 		return "genre/addGenre";
 	}
 
@@ -44,6 +45,7 @@ public class GenreController {
 
 		if (genreName.equals("")) {
 			model.addAttribute("errer", "ジャンル名は必須です");
+			now.nowYearMonthDate(model);
 			return "genre/addGenre";
 		}
 
@@ -56,6 +58,7 @@ public class GenreController {
 	@GetMapping("/genres/{id}/edit")
 	public String edit(@PathVariable Integer id,
 			Model model) {
+		now.nowYearMonthDate(model);
 		Genre genre = genreRepository.findById(id).get();
 		model.addAttribute("genre", genre);
 		return "genre/editGenre";
@@ -64,9 +67,17 @@ public class GenreController {
 	@PostMapping("/genres/{id}/edit")
 	public String update(@PathVariable Integer id,
 			@RequestParam String genreName,
-			@RequestParam boolean isIncome) {
+			@RequestParam boolean isIncome,
+			Model model) {
 
 		Genre genre = genreRepository.findById(id).get();
+
+		if (genreName.equals("")) {
+			model.addAttribute("errer", "ジャンル名は必須です");
+			now.nowYearMonthDate(model);
+			return "genre/addGenre";
+		}
+
 		genre.update(genreName, isIncome);
 		genreRepository.save(genre);
 

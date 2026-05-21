@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>収支詳細</title>
+<link th:href="@{/css/style.css}" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+	<header th:replace="~{conclusion/header}"></header>
+			
+		
+	<div id="container">
+			
+		<aside th:replace="~{conclusion/sideber}"></aside>
+		
+		<main>
+			
+			<nav id="edge">
+					<a th:href="@{/detil/{year}/{month}(year=${prevYear}, month=${prevMonth})}">← 前の月</a>
+					<a th:href="@{/detil/{year}/{month}(year=${nextYear}, month=${nextMonth})}">次の月 →</a>
+				</nav>
+			
+			<table border="2" class="total">
+				<tr>
+					<th colspan="2" th:text="${currentYear} + 年 + ${currentMonth} + 月の収支"></th>
+				</tr>
+				<tr>
+					<td colspan="2" th:text="${totalMonth}"></td>
+				</tr>
+				<tr>
+					<th class="income">収入</th>
+					<th class="expense">支出</th>
+				</tr>
+				<tr>
+					<td class="income" th:text="${totalIncomeMonth}"></td>
+					<td class="expense" th:text="${totalExpenseMonth}"></td>
+				</tr>
+			</table>
+			
+			<th:block th:if="${values}">
+				<h3>支出グラフ</h3>
+				<div style="width: 300px; margin: 0 auto;">
+					<canvas id="graph"></canvas>
+				</div>
+			</th:block>
+			
+			<table border="1">
+			<h3>内訳</h3>
+				<tr>
+					<th>ジャンル</th>
+					<th>合計金額</th>
+					<th>パーセント</th>
+				</tr>
+				<tr th:each="genre : ${genres}" th:if="${genre.isIncome}" class="income">
+					<td th:text="${genre.genreName}"></td>
+					<td th:text="${genre.total}">
+					</td>
+					<td th:text="|${genre.percent}%|"></td>
+				</tr>
+				<tr th:each="genre : ${genres}" th:if="!${genre.isIncome}" class="expense">
+					<td th:text="${genre.genreName}"></td>
+					<td th:text="${genre.total}">
+					</td>
+					<td th:text="|${genre.percent}%|"></td>
+				</tr>
+			</table>
+			
+		</main>
+	
+	</div>
+	
+	<footer th:replace="~{conclusion/footer}"></footer>
+
+	<script th:inline="javascript">
+		const labels = JSON.parse('[[${labels}]]');
+		const values = JSON.parse('[[${values}]]');		
+		
+		const ctx = document.getElementById('graph').getContext('2d');
+		const graph = new Chart(ctx, {
+				type: 'pie', // 円グラフ
+				data: {
+					labels: labels,
+					datasets: [{
+						data: values,
+						backgroundColor: ['#993355', '#dd6666', '#ffaa99',]
+					}]
+				}
+			
+			});
+	</script>
+	
+</body>
+</html>

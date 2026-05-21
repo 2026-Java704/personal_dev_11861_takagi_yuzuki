@@ -31,13 +31,17 @@
 			</tr>
 		</table>
 		
+		<div class="leftRight">
+			
 		<form th:action="@{/account/edit}" method="get">
 			<button>編集</button>
 		</form>
 		
-		<form th:action="@{/account/delete}" method="post">
-			<button th:id="delete">削除</button>
+		<form th:action="@{/account/delete}" method="post" onsubmit="return confirm('本当にアカウントを削除しますか?')">
+			<button th:id="delete">アカウント削除</button>
 		</form>
+		
+		</div>
 		
 	</main>
 	
