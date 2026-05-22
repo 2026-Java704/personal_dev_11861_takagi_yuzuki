@@ -36,7 +36,9 @@ public class UserController {
 
 	// 新規登録画面表示
 	@GetMapping("/register")
-	public String register() {
+	public String register(Model model) {
+		User user = new User();
+		model.addAttribute("user", user);
 		return "user/create";
 	}
 
@@ -54,26 +56,31 @@ public class UserController {
 		if (name.equals("")) {
 			errerList.add("名前は必須です");
 		}
+		if (name.length() > 20) {
+			errerList.add("名前は20文字以内で入力してください");
+		}
 		if (email.equals("")) {
 			errerList.add("メールアドレスは必須です");
 		}
 		if (password.equals("")) {
 			errerList.add("パスワードは必須です");
-		}
-		if (!password.equals(passwordConfirm)) {
+		} else if (password.length() < 6 || password.length() > 16) {
+			errerList.add("パスワードは6文字以上、16文字以内で入力してください");
+		} else if (!password.equals(passwordConfirm)) {
 			errerList.add("パスワードが違っています");
 		}
+
 		if (user != null) {
 			errerList.add("すでに登録されてるメールアドレスです");
 		}
 
-		System.out.println(errerList);
+		user = new User(name, email, password);
 
 		if (errerList.isEmpty()) {
-			user = new User(name, email, password);
 			userRepository.save(user);
 			return "redirect:/";
 		} else {
+			model.addAttribute("user", user);
 			model.addAttribute("errers", errerList);
 			return "user/create";
 		}
@@ -99,6 +106,7 @@ public class UserController {
 		} else {
 			accountLogin.setId(user.getId());
 			accountLogin.setName(user.getUserName());
+			session.setAttribute("loginUser", user);
 			return "redirect:/items";
 		}
 	}

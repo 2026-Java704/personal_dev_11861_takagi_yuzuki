@@ -61,9 +61,9 @@ public class ItemController {
 		genreList(model);
 		now.nowYearMonthDate(model);
 
-		List<Item> itemList = itemRepository.findByUser_IdOrderByAddDate(accountLogin.getId());
+		List<Item> itemList = itemRepository.findByUser_IdOrderByAddDateDesc(accountLogin.getId());
 		if (genreId != null) {
-			itemList = itemRepository.findByUser_IdAndGenre_IdOrderByAddDate(accountLogin.getId(), genreId);
+			itemList = itemRepository.findByUser_IdAndGenre_IdOrderByAddDateDesc(accountLogin.getId(), genreId);
 		}
 
 		model.addAttribute("items", itemList);

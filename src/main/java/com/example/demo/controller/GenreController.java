@@ -27,7 +27,7 @@ public class GenreController {
 	@GetMapping("/genres")
 	public String index(Model model) {
 		now.nowYearMonthDate(model);
-		List<Genre> genreList = genreRepository.findAll();
+		List<Genre> genreList = genreRepository.findAllByOrderById();
 		model.addAttribute("genres", genreList);
 		return "genre/genres";
 	}
