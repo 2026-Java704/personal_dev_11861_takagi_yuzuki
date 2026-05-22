@@ -87,6 +87,11 @@ table.total td{
 
 .leftRight{
 	display: flex;
+	margin: 1% 0;
+}
+
+.leftRight button{
+	
 }
 
 nav a{
@@ -101,6 +106,10 @@ nav a{
 
 .genreNav{
 	height: 40px;
+}
+
+.genreNav a{
+	margin: 0 0 30px;
 }
 
 .center{

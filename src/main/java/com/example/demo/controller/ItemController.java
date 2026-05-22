@@ -61,12 +61,17 @@ public class ItemController {
 		genreList(model);
 		now.nowYearMonthDate(model);
 
+		if (accountLogin.getId() == null) {
+			return "redirect:/";
+		}
+
 		List<Item> itemList = itemRepository.findByUser_IdOrderByAddDateDesc(accountLogin.getId());
 		if (genreId != null) {
 			itemList = itemRepository.findByUser_IdAndGenre_IdOrderByAddDateDesc(accountLogin.getId(), genreId);
 		}
 
 		model.addAttribute("items", itemList);
+		model.addAttribute("now", now.now());
 
 		model.addAttribute("totalMonth",
 				itemService.getMonthTotal(accountLogin.getId(), now.now().getYear(), now.now().getMonthValue()));
@@ -80,7 +85,9 @@ public class ItemController {
 	@GetMapping("/items/add")
 	public String add(Model model) {
 		now.nowYearMonthDate(model);
-		Item item = new Item();
+		User user = userRepository.findById(accountLogin.getId()).get();
+		Genre genre = genreRepository.findById(1).get();
+		Item item = new Item("", user, genre, null, null, "");
 		genreList(model);
 		model.addAttribute("item", item);
 		return "item/addItem";
@@ -107,15 +114,18 @@ public class ItemController {
 			errerList.add("名前を入力してください");
 		}
 
+		User user = userRepository.findById(accountLogin.getId()).get();
+		Genre genre = genreRepository.findById(genreId).get();
+		Item item = new Item(itemName, user, genre, price, addDate, comment);
+
 		if (errerList.isEmpty()) {
-			User user = userRepository.findById(accountLogin.getId()).get();
-			Genre genre = genreRepository.findById(genreId).get();
-			Item item = new Item(itemName, user, genre, price, addDate, comment);
 			itemRepository.save(item);
 			return "redirect:/items";
 
 		} else {
 			model.addAttribute("errers", errerList);
+			model.addAttribute("item", item);
+			genreList(model);
 			now.nowYearMonthDate(model);
 			return "item/addItem";
 		}

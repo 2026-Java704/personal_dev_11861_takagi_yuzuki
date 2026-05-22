@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.entity.Genre;
+import com.example.demo.model.AccountLogin;
 import com.example.demo.repository.GenreRepository;
 import com.example.demo.service.NowService;
 
@@ -17,16 +18,22 @@ import com.example.demo.service.NowService;
 public class GenreController {
 	private final GenreRepository genreRepository;
 	private final NowService now;
+	private final AccountLogin accountLogin;
 
 	public GenreController(GenreRepository genreRepository,
+			AccountLogin accountLogin,
 			NowService now) {
 		this.genreRepository = genreRepository;
 		this.now = now;
+		this.accountLogin = accountLogin;
 	}
 
 	@GetMapping("/genres")
 	public String index(Model model) {
 		now.nowYearMonthDate(model);
+		if (accountLogin.getId() == null) {
+			return "redirect:/";
+		}
 		List<Genre> genreList = genreRepository.findAllByOrderById();
 		model.addAttribute("genres", genreList);
 		return "genre/genres";
@@ -35,6 +42,8 @@ public class GenreController {
 	@GetMapping("/genres/add")
 	public String add(Model model) {
 		now.nowYearMonthDate(model);
+		Genre genre = new Genre("", true);
+		model.addAttribute("genre", genre);
 		return "genre/addGenre";
 	}
 
@@ -43,13 +52,15 @@ public class GenreController {
 			@RequestParam boolean isIncome,
 			Model model) {
 
+		Genre genre = new Genre(genreName, isIncome);
+
 		if (genreName.equals("")) {
 			model.addAttribute("errer", "ジャンル名は必須です");
 			now.nowYearMonthDate(model);
+			model.addAttribute("genre", genre);
 			return "genre/addGenre";
 		}
 
-		Genre genre = new Genre(genreName, isIncome);
 		genreRepository.save(genre);
 
 		return "redirect:/genres";

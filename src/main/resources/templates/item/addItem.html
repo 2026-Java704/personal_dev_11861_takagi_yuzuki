@@ -28,20 +28,21 @@
 				<tr>
 					<th>日付</th>
 					<td>
-						<input type="date" name="addDate">
+						<input type="date" name="addDate" th:value="${item.addDate}">
 					</td>
 				</tr>
 				<tr>
 					<th>名前</th>
 					<td>
-						<input type="text" name="itemName">
+						<input type="text" name="itemName" th:value="${item.itemName}">
 					</td>
 				</tr>
 				<tr>
 					<th>ジャンル</th>
 					<td>
 						<select name="genreId">
-							<option th:each="genre : ${genres}" th:text="${genre.genreName}" th:value="${genre.id}">
+							<option th:each="genre : ${genres}" th:text="${genre.genreName}"
+							th:value="${genre.id}" th:selected="${item.genre.id == genre.id}">
 							</option>
 						</select>
 					</td>
@@ -49,21 +50,23 @@
 				<tr>
 					<th>金額</th>
 					<td>
-						<input type="number" name="price">
+						<input type="number" name="price" th:value="${item.price}">
 					</td>
 				</tr>
 				<tr>
 					<th>コメント</th>
 					<td>
-						<textarea name="comment"></textarea>
+						<textarea name="comment" th:value="${item.comment}"></textarea>
 					</td>
 				</tr>
 			</table>
-			<input type="submit" value="登録">
+			
+			<div id="edge">
+				<a th:href="@{/items}">戻る</a>
+				<input type="submit" value="登録">
+			</div>
 		</form>
 		
-		<a th:href="@{/items}">戻る</a>
-
 	</main>
 	
 	</div>

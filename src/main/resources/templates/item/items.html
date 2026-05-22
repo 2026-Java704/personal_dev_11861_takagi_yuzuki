@@ -18,9 +18,17 @@
 		<nav>
 			<div><a th:href="@{/items/add}">＋新規登録</a></div>
 			<br>
-			<div class="genreNav"><a th:href="@{/items}">一覧</a>
-			<a th:each="genre : ${genres}" th:text="${genre.genreName}"
-				th:href="@{/items(genreId = ${genre.id})}" style="margin-right: 5px;"></a></div>
+			<div class="genreNav">
+				<a th:href="@{/items}">一覧</a>
+				<a th:each="genre : ${genres}" th:text="${genre.genreName}"
+				th:href="@{/items(genreId = ${genre.id})}" style="margin-right: 5px;"></a>
+			</div>
+			<div>
+				<form th:action="@{/items}" method="get">
+					<input type="date" name="date">
+					<input type="submit" value="検索">
+				</form>
+			</div>
 		</nav>
 
 		<table border="1">
@@ -33,6 +41,7 @@
 				<th>編集</th>
 				<th>削除</th>
 			</tr>
+			<div></div>
 			<tr th:each="item: ${items}">
 				<td th:text="${item.addDate}"></td>
 				<td th:text="${item.itemName}"></td>

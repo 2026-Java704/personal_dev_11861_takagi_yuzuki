@@ -24,20 +24,22 @@
 			<tr>
 				<th>ジャンル名</th>
 				<td>
-					<input type="text" name="genreName">
+					<input type="text" name="genreName" th:value="${genre.genreName}">
 				</td>
 			</tr>
 			<tr>
 				<th>収支</th>
 				<td>
-					収入<input type="radio" name="isIncome" value="true" checked>
-					支出<input type="radio" name="isIncome" value="false">
+					収入<input type="radio" name="isIncome" value="true" th:checked="${genre.isIncome == true}">
+					支出<input type="radio" name="isIncome" value="false" th:checked="${genre.isIncome == true}">
 				</td>
 			</tr>
 		</table>
-		<input type="submit" value="登録">
+		<div id="edge">
+			<a th:href="@{/genres}">戻る</a>
+			<input type="submit" value="登録">
+		</div>
 	</form>
-	<a th:href="@{/genres}">戻る</a>
 	</main>
 	
 	</div>
