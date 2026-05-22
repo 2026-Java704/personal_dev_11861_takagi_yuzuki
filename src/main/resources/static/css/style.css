@@ -30,7 +30,6 @@ footer{
 }
 
 aside{
-	display: flex;
 	width: 20%;
 	min-width: 0;
 	max-width: 200px;
@@ -47,15 +46,12 @@ main{
 	padding: 2%;
 	border: #aaaaaa double 5px;
 	flex: 1;
+	min-width: 450px;
 }
 
 #edge{
 	display: flex;
 	justify-content: space-between;
-}
-
-#edge a{
-	text-decoration: none;
 }
 
 table{
@@ -88,10 +84,28 @@ table.total td{
 	color: red;
 }
 
-button{
-	width: 100%;
-}
-
 .leftRight{
 	display: flex;
+}
+
+nav a{
+	background-color: gray;
+	color: white;
+	padding: 5px;
+	border-radius: 5px;
+	border: black solid 1px;
+	margin: 1% 0 1%;
+	text-decoration: none;
+}
+
+.genreNav{
+	height: 40px;
+}
+
+.center{
+	text-align: center;
+}
+
+.center form{
+	margin: 2%;
 }

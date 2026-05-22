@@ -1,7 +1,7 @@
 <aside>
 	<ul>
 		<li>
-			<a th:href="@{/items}">	アイテム管理</a>
+			<a th:href="@{/items}">収支管理</a>
 		</li>
 		<li>
 			<a th:href="@{/genres}">ジャンル管理</a>
@@ -11,6 +11,9 @@
 		</li>
 		<li>
 			<a th:href="@{/detil/{year}/{month}(year=${year}, month=${month})}">収支詳細</a>
+		</li>
+		<li>
+			<a th:href="@{/comparison/{year}(year=${year})}">月ごとの収支比較</a>
 		</li>
 		<li>
 			<a th:href="@{/account}">アカウント</a>

@@ -46,13 +46,17 @@ public class ItemController {
 		this.now = now;
 	}
 
+	// ジャンル一覧
 	public void genreList(Model model) {
 		List<Genre> genreList = genreRepository.findAll();
 		model.addAttribute("genres", genreList);
 	}
 
+	// 一覧表示（リスト型）
 	@GetMapping("/items")
 	public String index(@RequestParam(defaultValue = "") Integer genreId,
+			@RequestParam(defaultValue = "") Integer year,
+			@RequestParam(defaultValue = "") Integer month,
 			Model model) {
 		genreList(model);
 		now.nowYearMonthDate(model);
@@ -72,6 +76,7 @@ public class ItemController {
 		return "item/items";
 	}
 
+	// 追加画面表示
 	@GetMapping("/items/add")
 	public String add(Model model) {
 		now.nowYearMonthDate(model);
@@ -81,6 +86,7 @@ public class ItemController {
 		return "item/addItem";
 	}
 
+	// 追加処理
 	@PostMapping("/items/add")
 	public String store(@RequestParam(defaultValue = "") LocalDate addDate,
 			@RequestParam(defaultValue = "") Integer genreId,
@@ -110,10 +116,12 @@ public class ItemController {
 
 		} else {
 			model.addAttribute("errers", errerList);
+			now.nowYearMonthDate(model);
 			return "item/addItem";
 		}
 	}
 
+	// 更新画面表示
 	@GetMapping("/items/{id}/edit")
 	public String edit(@PathVariable Integer id,
 			Model model) {
@@ -124,6 +132,7 @@ public class ItemController {
 		return "item/editItem";
 	}
 
+	// 更新処理
 	@PostMapping("/items/{id}/edit")
 	public String update(@PathVariable Integer id,
 			@RequestParam(defaultValue = "") String itemName,
@@ -154,10 +163,12 @@ public class ItemController {
 		} else {
 			model.addAttribute("errers", errerList);
 			model.addAttribute("item", item);
+			now.nowYearMonthDate(model);
 			return "item/editItem";
 		}
 	}
 
+	// 削除処理
 	@PostMapping("/items/{id}/delete")
 	public String delete(@PathVariable Integer id,
 			Model model) {
@@ -171,11 +182,7 @@ public class ItemController {
 			@PathVariable(value = "month", required = false) Integer month,
 			Model model) {
 
-		// 現在の年月の取得
-		int currentYear = (year != null) ? year : now.now().getYear();
-		int currentMonth = (month != null) ? month : now.now().getMonthValue();
-
-		YearMonth yearMonth = YearMonth.of(currentYear, currentMonth);
+		YearMonth yearMonth = YearMonth.of(year, month);
 		LocalDate firstOfMonth = yearMonth.atDay(1); // 月初
 
 		//指定された年月の前月・次月を取得
@@ -196,15 +203,11 @@ public class ItemController {
 		}
 
 		model.addAttribute("calendarDates", calendarDates);
-		model.addAttribute("currentYear", currentYear);
-		model.addAttribute("currentMonth", currentMonth);
+		yesrMonth(year, month, model);
 
 		model.addAttribute("items", itemList);
 
-		model.addAttribute("prevYear", prevMonth.getYear());
-		model.addAttribute("prevMonth", prevMonth.getMonthValue());
-		model.addAttribute("nextYear", nextMonth.getYear());
-		model.addAttribute("nextMonth", nextMonth.getMonthValue());
+		prevNext(prevMonth, nextMonth, model);
 
 		model.addAttribute("totalMonth",
 				itemService.getMonthTotal(accountLogin.getId(), firstOfMonth.getYear(), firstOfMonth.getMonthValue()));
@@ -217,20 +220,20 @@ public class ItemController {
 			@PathVariable(value = "month", required = false) Integer month,
 			Model model) {
 
-		int currentYear = (year != null) ? year : now.now().getYear();
-		int currentMonth = (month != null) ? month : now.now().getMonthValue();
-
-		YearMonth yearMonth = YearMonth.of(currentYear, currentMonth);
+		YearMonth yearMonth = YearMonth.of(year, month);
 		LocalDate firstOfMonth = yearMonth.atDay(1); // 月初
 
 		//指定された年月の前月・次月を取得
 		LocalDate prevMonth = firstOfMonth.minusMonths(1);
 		LocalDate nextMonth = firstOfMonth.plusMonths(1);
 
+		// 収入
 		int totalIncomeMonth = itemService.getMonthIncome(accountLogin.getId(), firstOfMonth.getYear(),
 				firstOfMonth.getMonthValue());
+		// 支出
 		int totalExpenseMonth = itemService.getMonthExpense(accountLogin.getId(), firstOfMonth.getYear(),
 				firstOfMonth.getMonthValue());
+		// 収支
 		int totalMonth = itemService.getMonthTotal(accountLogin.getId(), firstOfMonth.getYear(),
 				firstOfMonth.getMonthValue());
 
@@ -265,19 +268,60 @@ public class ItemController {
 		model.addAttribute("labels", genreLabels);
 		model.addAttribute("values", percents);
 
-		model.addAttribute("currentYear", currentYear);
-		model.addAttribute("currentMonth", currentMonth);
-
 		model.addAttribute("totalIncomeMonth", totalIncomeMonth);
 		model.addAttribute("totalExpenseMonth", totalExpenseMonth);
 		model.addAttribute("totalMonth", totalMonth);
 
+		yesrMonth(year, month, model);
+		prevNext(prevMonth, nextMonth, model);
+
+		return "item/detil";
+	}
+
+	// 年月
+	public void yesrMonth(int year, int month, Model model) {
+		model.addAttribute("currentYear", year);
+		model.addAttribute("currentMonth", month);
+	}
+
+	// 翌年翌月・昨年昨月
+	public void prevNext(LocalDate prevMonth, LocalDate nextMonth, Model model) {
 		model.addAttribute("prevYear", prevMonth.getYear());
 		model.addAttribute("prevMonth", prevMonth.getMonthValue());
 		model.addAttribute("nextYear", nextMonth.getYear());
 		model.addAttribute("nextMonth", nextMonth.getMonthValue());
+	}
 
-		return "item/detil";
+	@GetMapping("/comparison/{year}")
+	public String a(@PathVariable Integer year,
+			Model model) {
+
+		now.nowYearMonthDate(model);
+
+		List<Integer> totalIncome = new ArrayList<>();
+		List<Integer> totalExpense = new ArrayList<>();
+		List<Integer> total = new ArrayList<>();
+
+		for (int i = 1; i <= 12; i++) {
+			YearMonth yearMonth = YearMonth.of(year, i);
+			LocalDate firstOfMonth = yearMonth.atDay(1);
+
+			// 収入
+			totalIncome.add(itemService.getMonthIncome(accountLogin.getId(), firstOfMonth.getYear(),
+					firstOfMonth.getMonthValue()));
+			// 支出
+			totalExpense.add(itemService.getMonthExpense(accountLogin.getId(), firstOfMonth.getYear(),
+					firstOfMonth.getMonthValue()));
+			// 収支
+			total.add(itemService.getMonthTotal(accountLogin.getId(), firstOfMonth.getYear(),
+					firstOfMonth.getMonthValue()));
+		}
+
+		model.addAttribute("totalIncome", totalIncome);
+		model.addAttribute("totalExpense", totalExpense);
+		model.addAttribute("total", total);
+
+		return "item/comparison";
 	}
 
 }

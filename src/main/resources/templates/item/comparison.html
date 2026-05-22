@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+	<header th:replace="~{conclusion/header}"></header>
+			
+		
+	<div id="container">
+			
+		<aside th:replace="~{conclusion/sideber}"></aside>
+		
+		<main>
+			
+			<div>収支：<span th:text="${total}"></span></div>
+			<div>収入：<span th:text="${totalIncome}"></span></div>
+			<div>支出：<span th:text="${totalExpense}"></span></div>
+			
+		</main>
+		
+	</div>
+		
+	<footer th:replace="~{conclusion/footer}"></footer>
+
+</body>
+</html>
