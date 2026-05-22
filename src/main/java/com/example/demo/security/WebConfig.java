@@ -16,6 +16,6 @@ public class WebConfig implements WebMvcConfigurer {
 		// ログイン画面や静的リソースを除外してインターセプターを適用
 		registry.addInterceptor(loginCheckInterceptor)
 				.addPathPatterns("/**")
-				.excludePathPatterns("/", "/login", "/logout", "/css/**");
+				.excludePathPatterns("/", "/login", "/register", "/logout", "/css/**");
 	}
 }
