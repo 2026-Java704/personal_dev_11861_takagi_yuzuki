@@ -69,8 +69,6 @@ public class ItemController {
 
 		model.addAttribute("totalMonth",
 				itemService.getMonthTotal(accountLogin.getId(), now.now().getYear(), now.now().getMonthValue()));
-		model.addAttribute("totalYear",
-				itemService.getYearTotal(accountLogin.getId(), now.now().getYear()));
 
 		return "item/items";
 	}

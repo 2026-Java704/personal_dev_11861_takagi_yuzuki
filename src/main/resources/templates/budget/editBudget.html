@@ -17,46 +17,38 @@
 
 		<main>
 
-			<form th:action="@{/items/add}" method="post">
+			<form th:action="@{/budgets/{id}/edit(id = ${budget.id})}" method="post">
 				<table border="1">
 					<tr>
-						<th>日付</th>
+						<th>西暦</th>
 						<td>
-							<input type="date" name="addDate" th:value="${item.addDate}">
+							<input type="number" name="year" th:value="${budget.year}" placeholder="例：2026">
 						</td>
 					</tr>
 					<tr>
-						<th>名前</th>
+						<th>月</th>
 						<td>
-							<input type="text" name="itemName" th:value="${item.itemName}">
+							<input type="number" name="month" th:value="${budget.month}" placeholder="1～12の数字">
 						</td>
 					</tr>
 					<tr>
 						<th>ジャンル</th>
 						<td>
 							<select name="genreId">
-								<option th:each="genre : ${genres}" th:text="${genre.genreName}" th:value="${genre.id}"
-									th:selected="${item.genre.id == genre.id}">
+								<option th:each="genre : ${genres}" th:text="${genre.genreName}" th:value="${genre.id}">
 								</option>
 							</select>
 						</td>
 					</tr>
 					<tr>
-						<th>金額</th>
+						<th>予算</th>
 						<td>
-							<input type="number" name="price" th:value="${item.price}">
-						</td>
-					</tr>
-					<tr>
-						<th>コメント</th>
-						<td>
-							<textarea name="comment" th:value="${item.comment}"></textarea>
+							<input type="number" name="amount" th:value="${budget.amount}">円
 						</td>
 					</tr>
 				</table>
-
 				<div id="edge">
-					<a th:href="@{/items}">戻る</a>
+					<a th:href="@{/budgets}">戻る</a>
 					<input type="submit" value="更新">
 				</div>
 			</form>
