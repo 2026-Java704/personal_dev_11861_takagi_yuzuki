@@ -121,9 +121,9 @@ public class UserController {
 	// アカウント情報画面表示
 	@GetMapping("/account")
 	public String account(Model model) {
-		if (accountLogin.getId() == null) {
-			return "redirect:/";
-		}
+		//		if (accountLogin.getId() == null) {
+		//			return "redirect:/";
+		//		}
 		now.nowYearMonthDate(model);
 		User user = userRepository.findById(accountLogin.getId()).get();
 		model.addAttribute("user", user);

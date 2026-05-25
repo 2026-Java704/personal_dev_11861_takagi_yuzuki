@@ -12,6 +12,8 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	// ユーザーのアイテムを日時順で一覧表示
 	List<Item> findByUser_IdOrderByAddDateDesc(Integer id);
 
+	List<Item> findByAddDateBetweenOrderByAddDate(LocalDate startDate, LocalDate endDate);
+
 	// ユーザーの月ごとの取得
 	List<Item> findByUser_IdAndAddDateBetweenOrderByAddDate(Integer userId, LocalDate startDate, LocalDate endDate);
 

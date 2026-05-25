@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>予算追加画面</title>
+<link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+	
+	<header th:replace="~{conclusion/header}"></header>
+
+	<div id="container">
+	
+		<aside th:replace="~{conclusion/sideber}"></aside>
+	
+	<main>
+		
+		<th:block th:if="${errers}">
+			<ul>
+				<li th:each="errer : ${errers}" th:text="${errer}" class="errer"></li>
+			</ul>
+		</th:block>
+		
+	<form th:action="@{/budgets/add}" method="post">
+		<table border="1">
+			<tr>
+				<th>西暦</th>
+				<td>
+					<input type="number" name="year" th:value="${budget.year}" placeholder="例：2026">
+				</td>
+			</tr>
+			<tr>
+				<th>月</th>
+				<td>
+					<input type="number" name="month" th:value="${budget.month}" placeholder="1～12の数字">
+				</td>
+			</tr>
+			<tr>
+				<th>ジャンル</th>
+				<td>
+					<select name="genreId">
+						<option th:each="genre : ${genres}" th:text="${genre.genreName}"
+						th:value="${genre.id}"></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th>予算</th>
+				<td>
+					<input type="number" name="amount" th:value="${budget.amount}">円
+				</td>
+			</tr>
+		</table>
+		<div id="edge">
+			<a th:href="@{/budgets}">戻る</a>
+			<input type="submit" value="登録">
+		</div>
+	</form>
+	</main>
+	
+	</div>
+	
+	<footer th:replace="~{conclusion/footer}"></footer>
+	
+</body>
+</html>

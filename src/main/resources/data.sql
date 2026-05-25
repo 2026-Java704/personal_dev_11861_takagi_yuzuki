@@ -12,3 +12,6 @@ INSERT INTO users(user_name,email,password) VALUES('鈴木一郎', 'suzuki@aaa.c
 -- 項目テーブルデータ
 INSERT INTO items(item_name, user_id, genre_id, price, add_date) VALUES('食事代', 1, 3, 1200, '2026/05/01');
 INSERT INTO items(item_name, user_id, genre_id, price, add_date) VALUES('給料', 2, 1, 200000, '2026/05/15');
+
+-- 予算テーブルデータ
+INSERT INTO budgets(user_id, genre_id, year, month, amount) VALUES(1, 3, 2026, 5, 50000);

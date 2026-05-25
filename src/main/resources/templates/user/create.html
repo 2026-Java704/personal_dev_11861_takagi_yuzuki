@@ -24,10 +24,10 @@
 		<br>メールアドレス：<input type="email" name="email" th:value="${user.email}">
 		<br>パスワード　　：<input type="password" name="password" placeholder="6文字以上、16文字以内">
 		<br>パスワード確認：<input type="password" name="passwordConfirm">
-		<br><input type="submit" value="登録">
+		<br><input class="login" type="submit" value="登録">
 	</form>
 	
-	<a th:href="@{/}">ログインはこちら</a>
+	<a th:href="@{/}" class="login">ログインはこちら</a>
 	
 	</main>
 

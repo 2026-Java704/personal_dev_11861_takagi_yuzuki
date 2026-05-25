@@ -3,6 +3,7 @@ body, html{
   margin: 0;
   max-height: 100vh;
   color: #333333;
+  font-family: "Meiryo", sans-serif;
 }
 
 body{
@@ -12,16 +13,15 @@ body{
 
 
 header{
-	background-color: #aaaaaa;
+	background-color: #9999bb;
 	font-size: 250%;
+	font-weight: bold;
 	color: white;
-	font-family: "Meiryo", sans-serif;
 	padding: 1%;
 }
 
 footer{
-	font-family: "Meiryo", sans-serif;
-	background-color: #aaaaaa;
+	background-color: #9999bb;
 	color: white;
 	text-align: center;
 }
@@ -42,10 +42,14 @@ aside, ul{
 	padding-left: 1%;
 }
 
+aside, ul, li{
+	padding: 0 0 2% 1%;
+}
+
 main{
 	margin: 1%;
 	padding: 2%;
-	border: #aaaaaa double 5px;
+	border: #9999bb double 5px;
 	flex: 1;
 	min-width: 450px;
 }
@@ -78,7 +82,7 @@ table.total{
 }
 
 table.total td{
-	border-bottom: 2px solid black;
+	border-bottom: 2px solid #333333;
 }
 
 .errer{
@@ -87,29 +91,36 @@ table.total td{
 
 .leftRight{
 	display: flex;
-	margin: 1% 0;
 }
 
-.leftRight button{
-	
-}
-
-nav a{
-	background-color: gray;
-	color: white;
-	padding: 5px;
-	border-radius: 5px;
-	border: black solid 1px;
-	margin: 1% 0 1%;
+a{
 	text-decoration: none;
 }
 
-.genreNav{
-	height: 40px;
+aside ul li a{
+	color: #333333;
 }
 
-.genreNav a{
-	margin: 0 0 30px;
+aside ul li a:hover{
+	color: #5555ff;
+	text-decoration: underline;
+}
+
+nav a{
+	background-color: #888899;
+	color: #fdfdff;
+	padding: 5px;
+	border-radius: 5px;
+	border: #333333 solid 2px;
+	margin: 1% 0 1%;
+}
+nav a:hover{
+	background-color: #fdfdff;
+	color: #333333;
+	padding: 5px;
+	border-radius: 5px;
+	border: #333333 solid 2px;
+	margin: 1% 0 1%;
 }
 
 .center{
@@ -118,4 +129,28 @@ nav a{
 
 .center form{
 	margin: 2%;
+}
+
+button{
+	background-color: #333355;
+	color: #fdfdff;
+	border-radius: 5px;
+	font-size: 100%;
+}
+
+button:hover{
+	background-color: #fdfdff;
+	color: #333355;
+	border-radius: 5px;
+}
+
+.login{
+	background-color: #eeeeff;
+	border: dashed 2px #333355;
+	border-radius: 5px;
+	padding: 1% 2%;
+	margin: 1% 0 2%;
+	color: #333333;
+	font-size: 90%;
+	font-weight: bold;
 }

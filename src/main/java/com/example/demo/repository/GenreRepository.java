@@ -10,4 +10,6 @@ public interface GenreRepository extends JpaRepository<Genre, Integer> {
 
 	List<Genre> findAllByOrderById();
 
+	List<Genre> findByIsIncome(boolean isIncome);
+
 }

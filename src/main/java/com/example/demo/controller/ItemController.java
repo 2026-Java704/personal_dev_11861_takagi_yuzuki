@@ -55,15 +55,9 @@ public class ItemController {
 	// 一覧表示（リスト型）
 	@GetMapping("/items")
 	public String index(@RequestParam(defaultValue = "") Integer genreId,
-			@RequestParam(defaultValue = "") Integer year,
-			@RequestParam(defaultValue = "") Integer month,
 			Model model) {
 		genreList(model);
 		now.nowYearMonthDate(model);
-
-		if (accountLogin.getId() == null) {
-			return "redirect:/";
-		}
 
 		List<Item> itemList = itemRepository.findByUser_IdOrderByAddDateDesc(accountLogin.getId());
 		if (genreId != null) {

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>予算管理画面</title>
+	<link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+
+<body>
+
+	<header th:replace="~{conclusion/header}"></header>
+	
+	<div id="container">
+	
+		<aside th:replace="~{conclusion/sideber}"></aside>
+	
+	<main>
+
+	<nav>
+		<p><a th:href="@{/budgets/add}">＋新規登録</a></p>
+	</nav>
+	
+	<th:block th:if="${budgets}">
+	<table border="1">
+		<tr>
+			<th>年月</th>
+			<th>ジャンル</th>
+			<th>予算</th>
+			<th>残り</th>
+			<th>編集</th>
+			<th>削除</th>
+		</tr>
+		<tr th:each="budget: ${budgets}">
+			<td th:text="|${budget.year}年${budget.month}月|"></td>
+			<td th:text="${budget.genre.genreName}"></td>
+			<td th:text="${budget.amount} + '円'"></td>
+			<td th:text="${budget.achievement} + '円'"></td>
+			<td class="center">
+				<form th:action="@{/budgets/{id}/edit(id = ${budget.id})}" method="get">
+					<button>編集</button>
+				</form>
+			</td>
+			<td class="center">
+				<form th:action="@{/budgets/{id}/delete(id = ${budget.id})}" method="post">
+					<button>削除</button>
+				</form>
+			</td>
+		</tr>
+	</table>
+	</th:block>
+	
+	<th:block th:if="!${budgets}">
+		<p>予算が設定されていません<br>新規登録から予算を設定してください</p>
+	</th:block>
+	
+	</main>
+	
+	</div>
+	
+	<footer th:replace="~{conclusion/footer}"></footer>
+</body>
+
+</html>

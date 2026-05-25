@@ -36,12 +36,12 @@
 				<span th:if="${genre.isIncome}">収入</span>
 				<span th:if="!${genre.isIncome}">支出</span>
 			</td>
-			<td>
+			<td class="center">
 				<form th:action="@{/genres/{id}/edit(id = ${genre.id})}" method="get">
 					<button>編集</button>
 				</form>
 			</td>
-			<td>
+			<td class="center">
 				<form th:action="@{/genres/{id}/delete(id = ${genre.id})}" method="post">
 					<button>削除</button>
 				</form>

@@ -1,78 +1,101 @@
 <!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <title>カレンダー家計簿</title>
+	<meta charset="UTF-8">
+	<title>カレンダー家計簿</title>
 	<link th:href="@{/css/style.css}" rel="stylesheet">
-    <style>
-        .calendar-table {border-collapse: collapse; }
-        .calendar-table th, .calendar-table td { border: 1px solid #ccc; padding: 5px;}
-        .other-month { color: #ccc; } /* 先月・来月の日付用 */
-		td{ height: 80px; }
-		#minus{  color: red;}
-		#plus{ color: blue;}
-    </style>
+	<style>
+		.calendar-table {
+			border-collapse: collapse;
+		}
+
+		.calendar-table th,
+		.calendar-table td {
+			border: 1px solid #ccc;
+			padding: 5px;
+		}
+
+		.other-month {
+			color: #ccc;
+		}
+
+		/* 先月・来月の日付用 */
+		td {
+			height: 80px;
+		}
+
+		#minus {
+			color: red;
+		}
+
+		#plus {
+			color: blue;
+		}
+	</style>
 </head>
+
 <body>
-	
+
 	<header th:replace="~{conclusion/header}"></header>
-		
-	
+
+
 	<div id="container">
-		
-	<aside th:replace="~{conclusion/sideber}"></aside>
-	
-	<main>
 
-		
-	<h2 th:text="${currentYear} + 年 + ${currentMonth} + 月の家計簿"></h2>
-	
-	<div>今月の収支：
-		<span th:if="${totalMonth} > 0" th:text="|+${totalMonth}|" ></span>
-		<span th:if="${totalMonth} <= 0" th:text="${totalMonth}"></span>
-		円</div>
-		
-	
-	<nav id="edge">
-		<a th:href="@{/calendar/{year}/{month}(year=${prevYear}, month=${prevMonth})}">← 前の月</a>
-		<a th:href="@{/calendar/{year}/{month}(year=${nextYear}, month=${nextMonth})}">次の月 →</a>
-	</nav>
+		<aside th:replace="~{conclusion/sideber}"></aside>
 
-    <table class="calendar-table">
-        <thead>
-            <tr>
-                <th style="color: red;">日</th>
-				<th>月</th>
-				<th>火</th>
-				<th>水</th>
-				<th>木</th>
-				<th>金</th>
-				<th style="color: blue;">土</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- 7日ごとに改行 -->
-            <tr th:each="date, iterStat : ${calendarDates}" th:if="${iterStat.index % 7 == 0}">
-                <td th:each="i : ${#numbers.sequence(0, 6)}" 
-                    th:with="currentDate=${calendarDates[iterStat.index + i]}"
-                    th:class="${currentDate.monthValue != currentMonth} ? 'other-month'">
-                    <span th:text="${currentDate.dayOfMonth}"></span>
-					<div th:each="item : ${items}" style="width: 100%;">
-						<span th:if="${item.addDate == currentDate && !item.genre.isIncome}"
-							id="minus" th:text="${item.itemName}"></span>
-						<span th:if="${item.addDate == currentDate && item.genre.isIncome}"
-							id="plus" th:text="${item.itemName}"></span>
-					</div>
-				</td>
-            </tr>
-        </tbody>
-    </table>
-	
-	</main>
-	
-	</div>	
-	
+		<main>
+
+
+			<h2 th:text="${currentYear} + 年 + ${currentMonth} + 月の家計簿"></h2>
+
+			<div>今月の収支：
+				<span th:if="${totalMonth} > 0" th:text="|+${totalMonth}|"></span>
+				<span th:if="${totalMonth} <= 0" th:text="${totalMonth}"></span>
+				円
+			</div>
+
+
+			<nav id="edge">
+				<a th:href="@{/calendar/{year}/{month}(year=${prevYear}, month=${prevMonth})}">← 前の月</a>
+				<a th:href="@{/calendar/{year}/{month}(year=${nextYear}, month=${nextMonth})}">次の月 →</a>
+			</nav>
+
+			<table class="calendar-table">
+				<thead>
+					<tr>
+						<th style="color: red;">日</th>
+						<th>月</th>
+						<th>火</th>
+						<th>水</th>
+						<th>木</th>
+						<th>金</th>
+						<th style="color: blue;">土</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- 7日ごとに改行 -->
+					<tr th:each="date, iterStat : ${calendarDates}" th:if="${iterStat.index % 7 == 0}">
+						<td th:each="i : ${#numbers.sequence(0, 6)}"
+							th:with="currentDate=${calendarDates[iterStat.index + i]}"
+							th:class="${currentDate.monthValue != currentMonth} ? 'other-month'">
+							<span th:text="${currentDate.dayOfMonth}"></span>
+							<div th:each="item : ${items}" style="width: 100%;">
+								<div th:if="${item.addDate == currentDate && !item.genre.isIncome}" id="minus"
+									class="hover-item" th:text="${item.itemName}"></div>
+								<div th:if="${item.addDate == currentDate && item.genre.isIncome}" id="plus"
+									class="hover-item" th:text="${item.itemName}"></div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+		</main>
+
+	</div>
+
 	<footer th:replace="~{conclusion/footer}"></footer>
-
 </body>
+
 </html>

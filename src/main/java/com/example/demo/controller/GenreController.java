@@ -31,9 +31,9 @@ public class GenreController {
 	@GetMapping("/genres")
 	public String index(Model model) {
 		now.nowYearMonthDate(model);
-		if (accountLogin.getId() == null) {
-			return "redirect:/";
-		}
+		//		if (accountLogin.getId() == null) {
+		//			return "redirect:/";
+		//		}
 		List<Genre> genreList = genreRepository.findAllByOrderById();
 		model.addAttribute("genres", genreList);
 		return "genre/genres";

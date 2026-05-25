@@ -16,10 +16,10 @@
 		<form th:action="@{/login}" method="post">
 			メールアドレス：<input type="text" name="email">
 			<br>パスワード　　：<input type="password" name="password">
-			<br><input type="submit" value="ログイン">
+			<br><input class="login" type="submit" value="ログイン">
 		</form>
 
-		<a th:href="@{/register}">新規登録はこちら</a>
+		<a th:href="@{/register}" class="login">新規登録はこちら</a>
 	</main>
 
 </body>
