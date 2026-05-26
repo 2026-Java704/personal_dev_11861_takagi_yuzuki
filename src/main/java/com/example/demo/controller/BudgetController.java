@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +20,6 @@ import com.example.demo.repository.BudgetRepository;
 import com.example.demo.repository.GenreRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.BudgetService;
-import com.example.demo.service.NowService;
 
 @Controller
 public class BudgetController {
@@ -28,28 +29,26 @@ public class BudgetController {
 	private final UserRepository userRepository;
 	private final AccountLogin accountLogin;
 	private final BudgetService budgetService;
-	private final NowService now;
 
 	public BudgetController(BudgetRepository budgetRepository,
 			GenreRepository genreRepository,
 			UserRepository userRepository,
 			AccountLogin accountLogin,
-			BudgetService budgetService,
-			NowService now) {
+			BudgetService budgetService) {
 		this.budgetRepository = budgetRepository;
 		this.genreRepository = genreRepository;
 		this.userRepository = userRepository;
 		this.accountLogin = accountLogin;
 		this.budgetService = budgetService;
-		this.now = now;
 	}
 
 	// 予算と実績の結果表示（何もないなら何もないで）
-	@GetMapping("/budgets")
-	public String index(Model model) {
-		now.nowYearMonthDate(model);
-		List<Budget> budgetList = budgetRepository.findByYearAndMonthOrderByYearDescMonthDesc(now.now().getYear(),
-				now.now().getMonthValue());
+	@GetMapping("/budgets/{year}/{month}")
+	public String index(@PathVariable(value = "year", required = false) Integer year,
+			@PathVariable(value = "month", required = false) Integer month,
+			Model model) {
+		List<Budget> budgetList = budgetRepository
+				.findByUser_IdAndYearAndMonthOrderByYearDescMonthDesc(accountLogin.getId(), year, month);
 
 		for (Budget budget : budgetList) {
 			budget.setAchievement(budgetService.achievement(accountLogin.getId(), budget.getGenre().getId(),
@@ -57,11 +56,24 @@ public class BudgetController {
 			budgetRepository.save(budget);
 		}
 
+		YearMonth yearMonth = YearMonth.of(year, month);
+		LocalDate firstOfMonth = yearMonth.atDay(1); // 月初
+
+		//指定された年月の前月・次月を取得
+		LocalDate prevMonth = firstOfMonth.minusMonths(1);
+		LocalDate nextMonth = firstOfMonth.plusMonths(1);
+
+		model.addAttribute("prevYear", prevMonth.getYear());
+		model.addAttribute("prevMonth", prevMonth.getMonthValue());
+		model.addAttribute("nextYear", nextMonth.getYear());
+		model.addAttribute("nextMonth", nextMonth.getMonthValue());
+
 		model.addAttribute("totalBudget",
-				budgetService.totalBudget(accountLogin.getId(), now.now().getYear(), now.now().getMonthValue()));
+				budgetService.totalBudget(accountLogin.getId(), year, month));
 		model.addAttribute("totalPrice",
-				budgetService.totalPrice(accountLogin.getId(), now.now().getYear(), now.now().getMonthValue()));
+				budgetService.totalPrice(accountLogin.getId(), year, month));
 		model.addAttribute("budgets", budgetList);
+		System.out.println(budgetList);
 		return "budget/budgets";
 	};
 

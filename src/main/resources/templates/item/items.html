@@ -22,7 +22,7 @@
 					<div class="leftRight">
 						<a th:href="@{/items}">一覧</a>
 						<a th:each="genre : ${genres}" th:href="@{/items(genreId = ${genre.id})}"
-						th:text="${genre.genreName}"></a>
+						th:text="${genre.genreName}" style="margin-left: 2px;"></a>
 <!--						<div th:each="genre : ${genres}">-->
 <!--							<input type="checkbox" name="genreId" th:value="${genre.id}">-->
 <!--							<label th:text="${genre.genreName}"></label>-->
@@ -67,8 +67,6 @@
 			</tr>
 		</table>
 
-		<p>今月の収支：<span th:text="${totalMonth}"></span>円</p>
-		
 		</main>
 		
 	</div>

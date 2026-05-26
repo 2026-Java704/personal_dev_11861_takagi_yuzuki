@@ -10,77 +10,82 @@
 <body>
 
 	<header th:replace="~{conclusion/header}"></header>
-	
-	<div id="container">
-	
-		<aside th:replace="~{conclusion/sideber}"></aside>
-	
-	<main>
-		
-		<h2 th:text="|${year}年${month}月|"></h2>
-		
-		<table border="2" class="total">
-			<tr>
-				<th class="income">予算</th>
-				<th class="expense">消費</th>
-			</tr>
-			<tr class="center">
-				<td class="income" th:text="${totalBudget}"></td>
-				<td class="expense" th:text="${totalPrice}"></td>
-			</tr>
-			<tr>
-				<th class="income" th:if="${totalBudget} - ${totalPrice} > 0" colspan="2">予算内</th>
-				<th class="expense" th:if="${totalBudget} - ${totalPrice} < 0" colspan="2">予算オーバー</th>
-			</tr>
-			<tr>
-				<th class="income" th:if="${totalBudget} - ${totalPrice} > 0" colspan="2"
-					th:text="'残り' + ${totalBudget} - ${totalPrice}"></th>
-				<th class="expense" th:if="${totalBudget} - ${totalPrice} < 0" colspan="2"
-					th:text="${totalBudget} - ${totalPrice}"></th>
-			</tr>
-		</table>
 
-	<nav>
-		<p><a th:href="@{/budgets/add}">＋新規登録</a></p>
-	</nav>
-	
-	<th:block th:if="${budgets}">
-	<table border="1">
-		<tr>
-			<th>年月</th>
-			<th>ジャンル</th>
-			<th>予算</th>
-			<th>残予算</th>
-			<th>編集</th>
-			<th>削除</th>
-		</tr>
-		<tr th:each="budget: ${budgets}">
-			<td th:text="|${budget.year}年${budget.month}月|"></td>
-			<td th:text="${budget.genre.genreName}"></td>
-			<td th:text="${budget.amount} + '円'"></td>
-			<td th:text="${budget.achievement} + '円'"></td>
-			<td class="center">
-				<form th:action="@{/budgets/{id}/edit(id = ${budget.id})}" method="get">
-					<button>編集</button>
-				</form>
-			</td>
-			<td class="center">
-				<form th:action="@{/budgets/{id}/delete(id = ${budget.id})}" method="post">
-					<button>削除</button>
-				</form>
-			</td>
-		</tr>
-	</table>
-	</th:block>
-	
-	<th:block th:if="!${budgets}">
-		<p>予算が設定されていません<br>新規登録から予算を設定してください</p>
-	</th:block>
-	
-	</main>
-	
+	<div id="container">
+
+		<aside th:replace="~{conclusion/sideber}"></aside>
+
+		<main>
+
+			<h2 th:text="|${year}年${month}月|"></h2>
+
+			<nav id="edge">
+				<a th:href="@{/budgets/{year}/{month}(year=${prevYear}, month=${prevMonth})}">← 前の月</a>
+				<a th:href="@{/budgets/{year}/{month}(year=${nextYear}, month=${nextMonth})}">次の月 →</a>
+			</nav>
+
+			<table border="2" class="total">
+				<tr>
+					<th class="income">予算</th>
+					<th class="expense">消費</th>
+				</tr>
+				<tr class="center">
+					<td class="income" th:text="${totalBudget}"></td>
+					<td class="expense" th:text="${totalPrice}"></td>
+				</tr>
+				<tr>
+					<th class="income" th:if="${totalBudget} - ${totalPrice} >= 0" colspan="2">予算内</th>
+					<th class="expense" th:if="${totalBudget} - ${totalPrice} < 0" colspan="2">予算オーバー</th>
+				</tr>
+				<tr>
+					<th class="income" th:if="${totalBudget} - ${totalPrice} >= 0" colspan="2"
+						th:text="${totalBudget} - ${totalPrice}"></th>
+					<th class="expense" th:if="${totalBudget} - ${totalPrice} < 0" colspan="2"
+						th:text="${totalBudget} - ${totalPrice}"></th>
+				</tr>
+			</table>
+
+			<nav>
+				<p><a th:href="@{/budgets/add}">＋新規登録</a></p>
+			</nav>
+
+			<th:block th:if="${!#lists.isEmpty(budgets)}">
+				<table border="1">
+					<tr>
+						<th>年月</th>
+						<th>ジャンル</th>
+						<th>予算</th>
+						<th>残予算</th>
+						<th>編集</th>
+						<th>削除</th>
+					</tr>
+					<tr th:each="budget: ${budgets}">
+						<td th:text="|${budget.year}年${budget.month}月|"></td>
+						<td th:text="${budget.genre.genreName}"></td>
+						<td th:text="${budget.amount} + '円'"></td>
+						<td th:text="${budget.achievement} + '円'"></td>
+						<td class="center">
+							<form th:action="@{/budgets/{id}/edit(id = ${budget.id})}" method="get">
+								<button>編集</button>
+							</form>
+						</td>
+						<td class="center">
+							<form th:action="@{/budgets/{id}/delete(id = ${budget.id})}" method="post">
+								<button>削除</button>
+							</form>
+						</td>
+					</tr>
+				</table>
+			</th:block>
+
+			<th:block th:if="${#lists.isEmpty(budgets)}">
+				<p class="center">予算が設定されていません<br>新規登録から予算を設定してください</p>
+			</th:block>
+
+		</main>
+
 	</div>
-	
+
 	<footer th:replace="~{conclusion/footer}"></footer>
 </body>
 
