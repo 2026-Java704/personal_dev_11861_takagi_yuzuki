@@ -1,3 +1,12 @@
 <header>
-	らくらく家計簿
+	<div id="head_edge">
+		<div>らくらく家計簿</div>
+		<details class="head_account">
+			<summary th:text="${@accountLogin.name}">ゲスト</summary>
+			<div class="dropdown-content">
+				<a th:href="@{/account}">アカウント管理</a>
+				<br><a th:href="@{/logout}">ログアウト</a>
+			</div>
+		</details>
+	</div>
 </header>

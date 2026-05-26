@@ -1,12 +1,15 @@
 @charset "UTF-8";
 body, html{
   margin: 0;
-  max-height: 100vh;
+  padding: 0;
+  height: 100%;
+  width: 100%;
   color: #333333;
   font-family: "Meiryo", sans-serif;
 }
 
 body{
+	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
 }
@@ -17,17 +20,48 @@ header{
 	font-size: 250%;
 	font-weight: bold;
 	color: white;
-	padding: 1%;
+	padding: 2% 3%;
+}
+
+#head_edge{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+summary {
+  list-style: none; /* Chrome, Firefoxなど */
+}
+
+summary::-webkit-details-marker {
+  display: none; /* Safari用 */
+}
+
+.head_account{
+	font-size: 40%;
+	height: 100%;
+}
+
+.head_account a{
+	color: #dddddd;
+}
+
+.head_account a:hover{
+	color: #fefeff;
+	text-decoration: underline;
 }
 
 footer{
 	background-color: #9999bb;
 	color: white;
 	text-align: center;
+	padding: 1%;
+	flex-shrink: 0;
 }
 
 #container{
 	display: flex;
+	flex: 1;
 }
 
 aside{
@@ -128,20 +162,36 @@ nav a:hover{
 }
 
 .center form{
-	margin: 2%;
+	margin: 6% 0 2%;
 }
 
-button{
+button, .button{
 	background-color: #333355;
 	color: #fdfdff;
 	border-radius: 5px;
 	font-size: 100%;
 }
 
-button:hover{
+button:hover, .button:hover{
 	background-color: #fdfdff;
 	color: #333355;
 	border-radius: 5px;
+}
+
+.return{
+	background-color: #333355;
+	border: solid 2px #333333;
+	color: #fdfdff;
+	border-radius: 5px;
+	padding: 2px 5px 0px;
+}
+
+.return:hover{
+	background-color: #fdfdff;
+	border: solid 2px #333333;
+	color: #333355;
+	border-radius: 5px;
+	padding: 2px 5px 1px;
 }
 
 .login{
