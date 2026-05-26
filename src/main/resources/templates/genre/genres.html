@@ -23,14 +23,12 @@
 	
 	<table border="1">
 		<tr>
-			<th>ID</th>
 			<th>ジャンル名</th>
 			<th>収支</th>
 			<th>編集</th>
 			<th>削除</th>
 		</tr>
 		<tr th:each="genre: ${genres}">
-			<td th:text="${genre.id}"></td>
 			<td th:text="${genre.genreName}"></td>
 			<td>
 				<span th:if="${genre.isIncome}">収入</span>

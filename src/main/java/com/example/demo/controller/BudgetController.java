@@ -116,7 +116,7 @@ public class BudgetController {
 
 		if (errerList.isEmpty()) {
 			budgetRepository.save(budget);
-			return "redirect:/budgets";
+			return "redirect:/budgets/" + year + "/" + month;
 
 		} else {
 			model.addAttribute("errers", errerList);
@@ -171,7 +171,7 @@ public class BudgetController {
 
 		if (errerList.isEmpty()) {
 			budgetRepository.save(budget);
-			return "redirect:/budgets";
+			return "redirect:/budgets/" + year + "/" + month;
 		} else {
 			model.addAttribute("errers", errerList);
 			model.addAttribute("budget", budget);
