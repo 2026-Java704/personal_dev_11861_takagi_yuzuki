@@ -46,7 +46,7 @@
 			</table>
 
 			<nav>
-				<p><a th:href="@{/budgets/add}">＋新規登録</a></p>
+				<p><a th:href="@{/budgets/{year}/{month}/add(year = ${year}, month = ${month})}">＋新規登録</a></p>
 			</nav>
 
 			<th:block th:if="${!#lists.isEmpty(budgets)}">
@@ -70,7 +70,7 @@
 							</form>
 						</td>
 						<td class="center">
-							<form th:action="@{/budgets/{id}/delete(id = ${budget.id})}" method="post">
+							<form th:action="@{/budgets/{id}/delete(id = ${budget.id}, year=${year}, month = ${month})}" method="post">
 								<button>削除</button>
 							</form>
 						</td>

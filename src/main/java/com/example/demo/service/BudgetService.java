@@ -40,6 +40,10 @@ public class BudgetService {
 
 		int achievement = amount - itemPrice;
 
+		if (achievement < 0) {
+			achievement = 0;
+		}
+
 		return achievement;
 	}
 

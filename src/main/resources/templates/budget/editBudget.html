@@ -26,7 +26,7 @@
 					<tr>
 						<th>西暦</th>
 						<td>
-							<input type="number" name="year" th:value="${budget.year}" placeholder="例：2026">
+							<input type="number" name="year" th:value="${budget.year}" placeholder="例：2026 前後10年以内">
 						</td>
 					</tr>
 					<tr>
@@ -52,7 +52,7 @@
 					</tr>
 				</table>
 				<div id="edge">
-					<a class="return" href="javascript:history.back();">戻る</a>
+					<a class="return" th:href="@{/budgets/{year}/{month}(year = ${budget.year}, month = ${budget.month})}">戻る</a>
 					<input class="button" type="submit" value="更新">
 				</div>
 			</form>

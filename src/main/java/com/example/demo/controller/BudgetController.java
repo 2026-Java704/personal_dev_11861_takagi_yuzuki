@@ -20,6 +20,7 @@ import com.example.demo.repository.BudgetRepository;
 import com.example.demo.repository.GenreRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.BudgetService;
+import com.example.demo.service.NowService;
 
 @Controller
 public class BudgetController {
@@ -29,17 +30,20 @@ public class BudgetController {
 	private final UserRepository userRepository;
 	private final AccountLogin accountLogin;
 	private final BudgetService budgetService;
+	private final NowService now;
 
 	public BudgetController(BudgetRepository budgetRepository,
 			GenreRepository genreRepository,
 			UserRepository userRepository,
 			AccountLogin accountLogin,
-			BudgetService budgetService) {
+			BudgetService budgetService,
+			NowService now) {
 		this.budgetRepository = budgetRepository;
 		this.genreRepository = genreRepository;
 		this.userRepository = userRepository;
 		this.accountLogin = accountLogin;
 		this.budgetService = budgetService;
+		this.now = now;
 	}
 
 	// 予算と実績の結果表示（何もないなら何もないで）
@@ -78,10 +82,12 @@ public class BudgetController {
 	};
 
 	// 予算設定
-	@GetMapping("/budgets/add")
-	public String add(Model model) {
+	@GetMapping("/budgets/{year}/{month}/add")
+	public String add(@PathVariable(value = "year", required = false) Integer year,
+			@PathVariable(value = "month", required = false) Integer month,
+			Model model) {
 		model.addAttribute("genres", genreRepository.findByIsIncome(false));
-		model.addAttribute("budget", new Budget());
+		model.addAttribute("budget", new Budget(null, null, year, month, null));
 		return "budget/addBudget";
 	};
 
@@ -97,11 +103,17 @@ public class BudgetController {
 
 		if (year == null) {
 			errerList.add("西暦を入力してください");
+			year = now.now().getYear();
+		} else if (now.now().getYear() - 10 > year || now.now().getYear() + 10 < year) {
+			errerList.add("西暦を正確に入力してください");
+			year = now.now().getYear();
 		}
 		if (month == null) {
 			errerList.add("月を入力してください");
+			month = now.now().getMonthValue();
 		} else if (month != null && month < 1 || month > 12) {
 			errerList.add("1～12の数字で入力してください");
+			month = now.now().getMonthValue();
 		}
 		if (genreId == null) {
 			errerList.add("ジャンルを選択してください");
@@ -140,21 +152,29 @@ public class BudgetController {
 	// 予算編集処理
 	@PostMapping("/budgets/{id}/edit")
 	public String update(@PathVariable Integer id,
-			@RequestParam Integer year,
-			@RequestParam Integer month,
-			@RequestParam Integer amount,
-			@RequestParam Integer genreId,
+			@RequestParam(defaultValue = "") Integer year,
+			@RequestParam(defaultValue = "") Integer month,
+			@RequestParam(defaultValue = "") Integer amount,
+			@RequestParam(defaultValue = "") Integer genreId,
 			Model model) {
 
+		Budget budget = budgetRepository.findById(id).get();
 		List<String> errerList = new ArrayList<>();
 
 		if (year == null) {
 			errerList.add("西暦を入力してください");
+			year = budget.getYear();
+		} else if (now.now().getYear() - 10 > year || now.now().getYear() + 10 < year) {
+			errerList.add("今年から10年前後までしか選べません");
+			errerList.add("西暦を正確に入力してください");
+			year = budget.getYear();
 		}
 		if (month == null) {
 			errerList.add("月を入力してください");
+			month = budget.getMonth();
 		} else if (month != null && month < 1 || month > 12) {
 			errerList.add("1～12の数字で入力してください");
+			month = budget.getMonth();
 		}
 		if (genreId == null) {
 			errerList.add("ジャンルを選択してください");
@@ -162,8 +182,6 @@ public class BudgetController {
 		if (amount == null) {
 			errerList.add("予算を入力してください");
 		}
-
-		Budget budget = budgetRepository.findById(id).get();
 
 		User user = userRepository.findById(accountLogin.getId()).get();
 		Genre genre = genreRepository.findById(genreId).get();
@@ -176,16 +194,18 @@ public class BudgetController {
 			model.addAttribute("errers", errerList);
 			model.addAttribute("budget", budget);
 			model.addAttribute("genres", genreRepository.findByIsIncome(false));
-			return "redirect:/budgets";
+			return "budget/editBudget";
 		}
 
 	};
 
 	// 予算削除
 	@PostMapping("/budgets/{id}/delete")
-	public String delete(@PathVariable Integer id) {
+	public String delete(@PathVariable Integer id,
+			@RequestParam Integer year,
+			@RequestParam Integer month) {
 		budgetRepository.deleteById(id);
-		return "redirect:/budgets";
+		return "redirect:/budgets/" + year + "/" + month;
 	};
 
 }

@@ -156,7 +156,7 @@ public class UserController {
 		}
 		if (password.equals("") && passwordConfirm.equals("")) {
 			password = user.getPassword();
-		} else if (password.equals(passwordConfirm)) {
+		} else if (password.equals(passwordConfirm) || passwordConfirm.equals("")) {
 			errerList.add("パスワードが一致しませんでした");
 		}
 
