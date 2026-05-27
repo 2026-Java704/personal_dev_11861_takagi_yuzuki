@@ -38,7 +38,7 @@
 				</tr>
 			</table>
 			
-			<th:block th:if="${values}">
+			<th:block th:if="${!#lists.isEmpty(values)}">
 				<h3>ジャンル別出費</h3>
 				<div style="width: 300px; margin: 0 auto;">
 					<canvas id="graph"></canvas>
@@ -83,7 +83,7 @@
 					labels: labels,
 					datasets: [{
 						data: values,
-						backgroundColor: ['#0072B2', '#D55E00', '#56B4E9', '#F0E442', '#E69F00']
+						backgroundColor: ['#0033AA', '#0077DD', '#56B4E9']
 					}]
 				}
 			

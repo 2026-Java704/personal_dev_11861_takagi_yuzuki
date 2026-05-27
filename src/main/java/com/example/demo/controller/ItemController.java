@@ -259,6 +259,9 @@ public class ItemController {
 		for (Genre genre : genreList) {
 			if (genre.getIsIncome() == false) {
 				genreLabels.add(genre.getGenreName());
+				if (genre.getPercent() == 0) {
+					continue;
+				}
 				percents.add(genre.getPercent());
 			}
 		}

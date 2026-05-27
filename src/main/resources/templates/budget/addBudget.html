@@ -16,9 +16,7 @@
 	<main>
 		
 		<th:block th:if="${errers}">
-			<ul>
-				<li th:each="errer : ${errers}" th:text="${errer}" class="errer"></li>
-			</ul>
+				<div th:each="errer : ${errers}" th:text="${errer}" class="errer"></div>
 		</th:block>
 		
 	<form th:action="@{/budgets/add}" method="post">

@@ -29,14 +29,6 @@ header{
 	align-items: center;
 }
 
-summary {
-  list-style: none; /* Chrome, Firefoxなど */
-}
-
-summary::-webkit-details-marker {
-  display: none; /* Safari用 */
-}
-
 .head_account{
 	font-size: 40%;
 	height: 100%;

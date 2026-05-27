@@ -16,6 +16,10 @@
 		<aside th:replace="~{conclusion/sideber}"></aside>
 
 		<main>
+			
+			<th:block th:if="${errers}">
+				<div th:each="errer : ${errers}" th:text="${errer}" class="errer"></div>
+			</th:block>
 
 			<form th:action="@{/budgets/{id}/edit(id = ${budget.id})}" method="post">
 				<table border="1">
