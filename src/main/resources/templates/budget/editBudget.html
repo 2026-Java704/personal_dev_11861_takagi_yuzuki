@@ -39,7 +39,8 @@
 						<th>ジャンル</th>
 						<td>
 							<select name="genreId">
-								<option th:each="genre : ${genres}" th:text="${genre.genreName}" th:value="${genre.id}">
+								<option th:each="genre : ${genres}" th:text="${genre.genreName}" th:value="${genre.id}"
+								th:selected = "${genre.id == budget.genre.id}">
 								</option>
 							</select>
 						</td>
