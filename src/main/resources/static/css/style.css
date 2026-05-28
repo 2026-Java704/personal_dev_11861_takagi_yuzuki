@@ -72,6 +72,11 @@ aside, ul, li{
 	padding: 0 0 2% 1%;
 }
 
+.sp_nav{
+		display: none;
+		height: 40px;
+	}
+
 main{
 	margin: 1%;
 	padding: 2%;
@@ -195,4 +200,32 @@ button:hover, .button:hover{
 	color: #333333;
 	font-size: 90%;
 	font-weight: bold;
+}
+
+@media screen and (max-width: 768px) {
+  aside {
+	display: none; /* PC用ナビを消す */
+	}
+
+	.sp_nav{
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+	
+	.sp_nav table{
+		border-color: #fdfdff;
+		background-color: #9999bb;
+	}
+	
+	.sp_nav a{
+		color: #fdfdff;
+	}
+	
+	.sp_nav a:hover{
+		color: #fdfdff;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+
 }

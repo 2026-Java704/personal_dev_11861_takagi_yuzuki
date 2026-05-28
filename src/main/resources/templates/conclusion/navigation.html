@@ -1,0 +1,21 @@
+<div class="sp_nav">
+	<table border="1">
+		<tr>
+			<td>
+				<a th:href="@{/items}">収支管理</a>
+			</td>
+			<td>
+				<a th:href="@{/genres}">ジャンル管理</a>
+			</td>
+			<td>
+				<a th:href="@{/budgets/{year}/{month}(year=${year}, month=${month})}">予算設定・管理</a>
+			</td>
+			<td>
+				<a th:href="@{/calendar/{year}/{month}(year=${year}, month=${month})}">カレンダー</a>
+			</td>
+			<td>
+				<a th:href="@{/detil/{year}/{month}(year=${year}, month=${month})}">月ごとの収支詳細</a>
+			</td>
+		</tr>
+	</table>
+</div>

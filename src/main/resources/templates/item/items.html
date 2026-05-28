@@ -9,17 +9,20 @@
 
 	<header th:replace="~{conclusion/header}"></header>
 	
+	<div th:replace="~{conclusion/navigation}"></div>
+
 	<div id="container">
 	
 		<aside th:replace="~{conclusion/sideber}"></aside>
 	
+		
 		<main>
 			
 		<nav>
-			<div>
+			<div style="margin: 10px 0 5px;">
 				<form th:action="@{/items}" method="get">
 					<a th:href="@{/items/add}">＋新規登録</a>
-					<div class="leftRight">
+					<div style="margin: 5px 0 0;" class="leftRight">
 						<a th:href="@{/items}">一覧</a>
 						<a th:each="genre : ${genres}" th:href="@{/items(genreId = ${genre.id})}"
 						th:text="${genre.genreName}" style="margin-left: 2px;"></a>
